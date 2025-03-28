@@ -7,6 +7,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -17,6 +18,8 @@ public class ActivityGetter {
   private String username;
   private ActivityPrinter printer;
   private ObjectMapper mapper = new ObjectMapper();
+  private ArrayList<GitEvent> events = new ArrayList<>();
+  private EventFactory factory = new EventFactory();
 
   public ActivityGetter(
       String username) {
@@ -29,7 +32,7 @@ public class ActivityGetter {
     this.printer = printer;
   }
 
-  private String getActivity() {
+  public void getActivity() {
     try {
       var client = HttpClient.newBuilder().build();
       var uri = new URI(String.format("https://api.github.com/users/%s/events", this.username));
@@ -37,13 +40,14 @@ public class ActivityGetter {
 
       var response = client.send(request, BodyHandlers.ofString(Charset.defaultCharset()));
       var body = response.body();
-      return body;
+      JsonNode root = getJsonRoot(body);
+      unpackEventList(root);
     } catch (IOException ex) {
-      return ex.toString();
+      System.err.println(ex);
     } catch (URISyntaxException ex) {
-      return ex.toString();
+      System.err.println(ex);
     } catch (InterruptedException ex) {
-      return ex.toString();
+      System.err.println(ex);
     }
   }
 
@@ -63,16 +67,17 @@ public class ActivityGetter {
   public void unpackEventList(JsonNode root) {
     if (root.isArray()) {
       for (int i = 0; i < root.size(); i++) {
-        GitEvent event = new GitEvent(root.get(i));
-        System.out.println(event.toString());
+        GitEvent event = factory.create(root.get(i));
+        this.events.add(event);
       }
     }
   }
 
   public void showActivity() {
-    String activity = getActivity();
-    JsonNode root = getJsonRoot(activity);
-    unpackEventList(root);
     printer.print("Done");
+    for (int i = 0; i < this.events.size(); i++) {
+      GitEvent event = this.events.get(i);
+      printer.print(event.toString());
+    }
   }
 }
