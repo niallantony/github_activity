@@ -20,19 +20,24 @@ public class ActivityGetter {
   private ArrayList<GitEvent> events = new ArrayList<>();
   private EventFactory factory = new EventFactory();
   private String serverResponseBody;
+  private HttpClient client;
 
-  public ActivityGetter(
-      String username) {
+  public ActivityGetter(String username) {
     this.username = username;
+    this.client = HttpClient.newBuilder().build();
+  }
+
+  public ActivityGetter(String username, HttpClient client) {
+    this.username = username;
+    this.client = client;
   }
 
   public ActivityGetter sendRequest() {
     try {
-      var client = HttpClient.newBuilder().build();
       var uri = new URI(String.format("https://api.github.com/users/%s/events", this.username));
       var request = HttpRequest.newBuilder(uri).build();
 
-      var response = client.send(request, BodyHandlers.ofString(Charset.defaultCharset()));
+      var response = this.client.send(request, BodyHandlers.ofString(Charset.defaultCharset()));
       this.serverResponseBody = response.body();
       return this;
     } catch (IOException ex) {
