@@ -37,7 +37,6 @@ public class ActivityGetter {
 
       var response = client.send(request, BodyHandlers.ofString(Charset.defaultCharset()));
       var body = response.body();
-      System.out.println(response.headers());
       return body;
     } catch (IOException ex) {
       return ex.toString();
@@ -61,16 +60,19 @@ public class ActivityGetter {
     }
   }
 
-  public void unpackEventList() {
-    String activity = getActivity();
-    JsonNode root = getJsonRoot(activity);
+  public void unpackEventList(JsonNode root) {
     if (root.isArray()) {
       for (int i = 0; i < root.size(); i++) {
-        JsonNode event = root.get(i);
-        if (i == (root.size() - 1)) {
-          System.out.println(event.toPrettyString());
-        }
+        GitEvent event = new GitEvent(root.get(i));
+        System.out.println(event.toString());
       }
     }
+  }
+
+  public void showActivity() {
+    String activity = getActivity();
+    JsonNode root = getJsonRoot(activity);
+    unpackEventList(root);
+    printer.print("Done");
   }
 }
