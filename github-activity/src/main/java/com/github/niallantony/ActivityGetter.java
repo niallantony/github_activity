@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ActivityGetter {
   private String username;
-  private ActivityPrinter printer;
   private ObjectMapper mapper = new ObjectMapper();
   private ArrayList<GitEvent> events = new ArrayList<>();
   private EventFactory factory = new EventFactory();
@@ -24,15 +23,9 @@ public class ActivityGetter {
   public ActivityGetter(
       String username) {
     this.username = username;
-    this.printer = new CommandLinePrinter();
   }
 
-  public ActivityGetter(String username, ActivityPrinter printer) {
-    this.username = username;
-    this.printer = printer;
-  }
-
-  public void getActivity() {
+  public void downloadActivity() {
     try {
       var client = HttpClient.newBuilder().build();
       var uri = new URI(String.format("https://api.github.com/users/%s/events", this.username));
@@ -64,7 +57,7 @@ public class ActivityGetter {
     }
   }
 
-  public void unpackEventList(JsonNode root) {
+  private void unpackEventList(JsonNode root) {
     if (root.isArray()) {
       for (int i = 0; i < root.size(); i++) {
         GitEvent event = factory.create(root.get(i));
@@ -73,15 +66,35 @@ public class ActivityGetter {
     }
   }
 
-  public void showActivity(int limit) {
-    printer.print("Done");
+  public String getActivity(int limit) {
+    StringBuilder activity = new StringBuilder();
     for (int i = 0; i < limit; i++) {
       if (this.events.size() > i) {
         GitEvent event = this.events.get(i);
-        printer.print("- " + event.toString());
+        activity.append(event.toString() + "\n");
       } else {
         break;
       }
     }
+    return activity.toString();
+  }
+
+  public String getAggregatedActivity(int limit) {
+    StringBuilder activity = new StringBuilder();
+    try {
+      ArrayList<GitEvent> aggregated = EventAggregator.aggregate(this.events);
+      for (int i = 0; i < limit; i++) {
+        if (this.events.size() > i) {
+          GitEvent event = aggregated.get(i);
+          activity.append(event.toString() + "\n");
+        } else {
+          break;
+        }
+      }
+      return aggregated.toString();
+    } catch (IndexOutOfBoundsException ex) {
+      return "No Events found";
+    }
+
   }
 }
