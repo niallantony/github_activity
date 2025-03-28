@@ -74,7 +74,6 @@ public class ActivityGetter {
   }
 
   public void showActivity(int limit) {
-    printer.print("Done");
     for (int i = 0; i < limit; i++) {
       if (this.events.size() > i) {
         GitEvent event = this.events.get(i);
@@ -83,5 +82,22 @@ public class ActivityGetter {
         break;
       }
     }
+  }
+
+  public void showAggregatedActivity(int limit) {
+    try {
+      ArrayList<GitEvent> aggregated = EventAggregator.aggregate(this.events);
+      for (int i = 0; i < limit; i++) {
+        if (this.events.size() > i) {
+          GitEvent event = aggregated.get(i);
+          printer.print("- " + event.toString());
+        } else {
+          break;
+        }
+      }
+    } catch (IndexOutOfBoundsException ex) {
+      System.err.println(ex);
+    }
+
   }
 }

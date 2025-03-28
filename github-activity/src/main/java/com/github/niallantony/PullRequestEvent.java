@@ -19,4 +19,11 @@ public class PullRequestEvent extends GitEvent {
   public String toString() {
     return String.format("Pull request action: %s, branch '%s' in repo %s", this.action, this.title, this.toRepo);
   }
+
+  @Override
+  public boolean isSimilar(GitEvent other) {
+    if (this.repo_name.equals(other.getRepo()) && this.action.equals("closed"))
+      return true;
+    return false;
+  }
 }
