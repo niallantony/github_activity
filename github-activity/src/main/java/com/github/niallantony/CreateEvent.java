@@ -15,4 +15,11 @@ public class CreateEvent extends GitEvent {
   public String toString() {
     return String.format("Created '%s': %s", this.repo_name, this.desc);
   }
+
+  @Override
+  public boolean isSimilar(GitEvent other) {
+    if (this.repo_name.equals(other.getRepo()))
+      return true;
+    return false;
+  }
 }

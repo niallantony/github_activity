@@ -14,4 +14,23 @@ public class PushEvent extends GitEvent {
   public String toString() {
     return String.format("Pushed %d commit(s) to %s", this.size, this.repo_name);
   }
+
+  @Override
+  public boolean isSimilar(GitEvent other) {
+    if (other.getType().equals(this.type) && other.getRepo().equals(this.repo_name)) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public int getAggregationData() {
+    return this.size;
+  }
+
+  @Override
+  public void aggregate(GitEvent other) {
+    this.size = this.size + other.getAggregationData();
+  }
+
 }
