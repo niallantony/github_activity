@@ -12,6 +12,6 @@ public class PushEvent extends GitEvent {
 
   @Override
   public String toString() {
-    return String.format("Pushed %d commits to %s", this.size, this.repo_name);
+    return String.format("Pushed %d commit(s) to %s", this.size, this.repo_name);
   }
 }

@@ -73,11 +73,15 @@ public class ActivityGetter {
     }
   }
 
-  public void showActivity() {
+  public void showActivity(int limit) {
     printer.print("Done");
-    for (int i = 0; i < this.events.size(); i++) {
-      GitEvent event = this.events.get(i);
-      printer.print(event.toString());
+    for (int i = 0; i < limit; i++) {
+      if (this.events.size() > i) {
+        GitEvent event = this.events.get(i);
+        printer.print("- " + event.toString());
+      } else {
+        break;
+      }
     }
   }
 }
