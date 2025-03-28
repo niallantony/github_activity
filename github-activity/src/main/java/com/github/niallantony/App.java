@@ -8,8 +8,7 @@ import java.util.ArrayList;
 public class App {
   public static void main(String[] args) {
     ActivityGetter getter = new ActivityGetter(args[0]);
-    getter.downloadActivity();
-    ArrayList<String> activity = getter.getAggregatedActivity(10);
+    ArrayList<String> activity = getter.sendRequest().json().getAggregatedActivity(5);
     CommandLinePrinter printer = new CommandLinePrinter();
     printer.printAll(activity);
   }

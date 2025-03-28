@@ -1,7 +1,6 @@
 package com.github.niallantony;
 
 import java.io.IOException;
-import java.lang.classfile.instruction.ConstantInstruction.ArgumentConstantInstruction;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -20,35 +19,37 @@ public class ActivityGetter {
   private ObjectMapper mapper = new ObjectMapper();
   private ArrayList<GitEvent> events = new ArrayList<>();
   private EventFactory factory = new EventFactory();
+  private String serverResponseBody;
 
   public ActivityGetter(
       String username) {
     this.username = username;
   }
 
-  public void downloadActivity() {
+  public ActivityGetter sendRequest() {
     try {
       var client = HttpClient.newBuilder().build();
       var uri = new URI(String.format("https://api.github.com/users/%s/events", this.username));
       var request = HttpRequest.newBuilder(uri).build();
 
       var response = client.send(request, BodyHandlers.ofString(Charset.defaultCharset()));
-      var body = response.body();
-      JsonNode root = getJsonRoot(body);
-      unpackEventList(root);
+      this.serverResponseBody = response.body();
+      return this;
     } catch (IOException ex) {
       System.err.println(ex);
+      return null;
     } catch (URISyntaxException ex) {
       System.err.println(ex);
+      return null;
     } catch (InterruptedException ex) {
       System.err.println(ex);
+      return null;
     }
   }
 
   private JsonNode getJsonRoot(String body) {
     try {
       return this.mapper.readTree(body);
-
     } catch (JsonMappingException ex) {
       System.out.println(ex.toString());
       return null;
@@ -58,49 +59,31 @@ public class ActivityGetter {
     }
   }
 
-  private void unpackEventList(JsonNode root) {
+  public ActivityGetter json() {
+    JsonNode root = getJsonRoot(this.serverResponseBody);
     if (root.isArray()) {
       for (int i = 0; i < root.size(); i++) {
         GitEvent event = factory.create(root.get(i));
         this.events.add(event);
       }
     }
+    return this;
   }
 
-  public String getActivity(int limit) {
-    StringBuilder activity = new StringBuilder();
+  public ArrayList<String> getActivity(int limit) {
+    ArrayList<String> activity = new ArrayList<>();
     for (int i = 0; i < limit; i++) {
       if (this.events.size() > i) {
         GitEvent event = this.events.get(i);
-        activity.append(event.toString() + "\n");
+        activity.add(event.toString() + "\n");
       } else {
         break;
       }
     }
-    return activity.toString();
+    return activity;
   }
 
   public ArrayList<String> getAggregatedActivity(int limit) {
-    ArrayList<String> activity = new ArrayList<>();
-    try {
-      ArrayList<GitEvent> aggregated = EventAggregator.aggregate(this.events);
-      for (int i = 0; i < limit; i++) {
-        if (this.events.size() > i) {
-          GitEvent event = aggregated.get(i);
-          activity.add(event.toString());
-        } else {
-          break;
-        }
-      }
-      return activity;
-    } catch (IndexOutOfBoundsException ex) {
-      activity.add("No Activity Found");
-      return activity;
-    }
-
-  }
-
-  public ArrayList<String> showAggregatedActivity(int limit) {
     ArrayList<String> activity = new ArrayList<>();
     try {
       ArrayList<GitEvent> aggregated = EventAggregator.aggregate(this.events);
