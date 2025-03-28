@@ -2,3 +2,11 @@
 /Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/ActivityPrinter.java
 /Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/App.java
 /Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/CommandLinePrinter.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/CreateEvent.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/DeleteEvent.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/EventAggregator.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/EventFactory.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/GitEvent.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/IssuesEvent.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/PullRequestEvent.java
+/Users/niallantony/Desktop/Niall/projects/JavaGitActivity/github-activity/src/main/java/com/github/niallantony/PushEvent.java
