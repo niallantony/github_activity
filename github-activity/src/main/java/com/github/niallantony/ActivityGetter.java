@@ -66,12 +66,8 @@ public class ActivityGetter {
     }
   }
 
-<<<<<<< HEAD
   public String getActivity(int limit) {
     StringBuilder activity = new StringBuilder();
-=======
-  public void showActivity(int limit) {
->>>>>>> 15982249d546069e05f8d060f389cef0ec3b5871
     for (int i = 0; i < limit; i++) {
       if (this.events.size() > i) {
         GitEvent event = this.events.get(i);
