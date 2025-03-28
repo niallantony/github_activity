@@ -1,6 +1,7 @@
 package com.github.niallantony;
 
 import java.io.IOException;
+import java.lang.classfile.instruction.ConstantInstruction.ArgumentConstantInstruction;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -79,38 +80,42 @@ public class ActivityGetter {
     return activity.toString();
   }
 
-  public String getAggregatedActivity(int limit) {
-    StringBuilder activity = new StringBuilder();
+  public ArrayList<String> getAggregatedActivity(int limit) {
+    ArrayList<String> activity = new ArrayList<>();
     try {
       ArrayList<GitEvent> aggregated = EventAggregator.aggregate(this.events);
       for (int i = 0; i < limit; i++) {
         if (this.events.size() > i) {
           GitEvent event = aggregated.get(i);
-          activity.append(event.toString() + "\n");
+          activity.add(event.toString());
         } else {
           break;
         }
       }
-      return aggregated.toString();
+      return activity;
     } catch (IndexOutOfBoundsException ex) {
-      return "No Events found";
+      activity.add("No Activity Found");
+      return activity;
     }
 
   }
 
-  public void showAggregatedActivity(int limit) {
+  public ArrayList<String> showAggregatedActivity(int limit) {
+    ArrayList<String> activity = new ArrayList<>();
     try {
       ArrayList<GitEvent> aggregated = EventAggregator.aggregate(this.events);
       for (int i = 0; i < limit; i++) {
         if (this.events.size() > i) {
           GitEvent event = aggregated.get(i);
-          printer.print("- " + event.toString());
+          activity.add(event.toString());
         } else {
           break;
         }
       }
+      return activity;
     } catch (IndexOutOfBoundsException ex) {
-      System.err.println(ex);
+      activity.add("No Activity Found");
+      return activity;
     }
 
   }
