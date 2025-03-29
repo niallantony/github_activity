@@ -46,6 +46,10 @@ public class GitEvent {
     return this.type;
   }
 
+  public void setRepo(String repo) {
+    this.repo_name = repo;
+  }
+
   public boolean isSimilar(GitEvent other) {
     if (other.getType().equals(this.type))
       return true;
@@ -53,6 +57,8 @@ public class GitEvent {
   }
 
   public void aggregate(GitEvent other) {
-    this.aggregations++;
+    if (other.isSimilar(this)) {
+      this.aggregations++;
+    }
   }
 }

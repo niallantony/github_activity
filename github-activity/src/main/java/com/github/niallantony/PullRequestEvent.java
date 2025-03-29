@@ -21,8 +21,22 @@ public class PullRequestEvent extends GitEvent {
   }
 
   @Override
+  public int getAggregationData() {
+    if (this.action.equals("opened")) {
+      return 1;
+    }
+    return 0;
+  }
+
+  public void setAction(String other) {
+    this.action = other;
+  }
+
+  @Override
   public boolean isSimilar(GitEvent other) {
-    if (this.repo_name.equals(other.getRepo()) && this.action.equals("closed"))
+    if (this.repo_name.equals(other.getRepo())
+        && other.getAggregationData() == 1
+        && this.action.equals("closed"))
       return true;
     return false;
   }

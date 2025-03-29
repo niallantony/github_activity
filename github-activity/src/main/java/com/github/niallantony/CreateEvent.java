@@ -18,7 +18,7 @@ public class CreateEvent extends GitEvent {
 
   @Override
   public boolean isSimilar(GitEvent other) {
-    if (this.repo_name.equals(other.getRepo()))
+    if (this.repo_name.equals(other.getRepo()) && this.type.equals(other.getType()))
       return true;
     return false;
   }
