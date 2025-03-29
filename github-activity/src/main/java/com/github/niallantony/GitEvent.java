@@ -12,6 +12,9 @@ public class GitEvent {
   protected boolean isPublic;
   protected String createdAt;
 
+  public static final String EVENT_STRING = "Event %s: %s created at %s";
+  public static final String EVENTS_STRING = "%d %s events created at %s";
+
   public GitEvent(JsonNode event) {
     this.id = event.get("id").asText();
     this.type = event.get("type").asText();
@@ -25,10 +28,9 @@ public class GitEvent {
 
   public String toString() {
     if (this.aggregations == 1) {
-      return String.format("Event %s: %s created at %s", this.id, this.type, this.createdAt);
+      return String.format(GitEvent.EVENT_STRING, this.id, this.type, this.createdAt);
     } else {
-      return String.format("%d %s events created at %s", this.aggregations, this.type, this.createdAt);
-
+      return String.format(GitEvent.EVENTS_STRING, this.aggregations, this.type, this.createdAt);
     }
   }
 
@@ -45,7 +47,7 @@ public class GitEvent {
   }
 
   public boolean isSimilar(GitEvent other) {
-    if (other.getType() == this.type)
+    if (other.getType().equals(this.type))
       return true;
     return false;
   }

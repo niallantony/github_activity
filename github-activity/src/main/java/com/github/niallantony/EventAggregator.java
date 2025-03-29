@@ -7,8 +7,12 @@ public class EventAggregator {
     ArrayList<GitEvent> aggregated = new ArrayList<>();
     if (events.size() < 1)
       throw new IndexOutOfBoundsException();
-    GitEvent current = events.get(0);
-    for (int i = 1; i < events.size(); i++) {
+    GitEvent current = null;
+    for (int i = 0; i < events.size(); i++) {
+      if (current == null) {
+        current = events.get(i);
+        continue;
+      }
       if (current.isSimilar(events.get(i))) {
         current.aggregate(events.get(i));
       } else {
@@ -16,6 +20,7 @@ public class EventAggregator {
         current = events.get(i);
       }
     }
+    aggregated.add(current);
     return aggregated;
   }
 }
