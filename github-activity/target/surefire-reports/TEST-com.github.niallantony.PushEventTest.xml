@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.github.niallantony.AppTest" time="0.001" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.github.niallantony.PushEventTest" time="0.006" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -58,5 +58,9 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16|localhost|*.localhost|127.0.0.1:21300|*.127.0.0.1:21300|lx.astxsvc.com|*.lx.astxsvc.com"/>
     <property name="java.class.version" value="66.0"/>
   </properties>
-  <testcase name="shouldAnswerWithTrue" classname="com.github.niallantony.AppTest" time="0.001"/>
+  <testcase name="PushEvent_WhenComparedToDifferentRepo_ReturnsIsNotSimilar" classname="com.github.niallantony.PushEventTest" time="0.001"/>
+  <testcase name="PushEvent_WhenComparedToDifferentEvent_ReturnsIsNotSimilar" classname="com.github.niallantony.PushEventTest" time="0.001"/>
+  <testcase name="PushEvent_WhenAggregatedToSimilarEvent_AggregatesSize" classname="com.github.niallantony.PushEventTest" time="0.002"/>
+  <testcase name="PushEvent_WhenComparedToSimilarEvent_ReturnsIsSimilar" classname="com.github.niallantony.PushEventTest" time="0.0"/>
+  <testcase name="PushEvent_WhenAggregatedWithDifferentEvent_DoesNotAggregateSize" classname="com.github.niallantony.PushEventTest" time="0.0"/>
 </testsuite>

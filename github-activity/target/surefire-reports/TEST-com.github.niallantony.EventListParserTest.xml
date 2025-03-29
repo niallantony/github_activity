@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.github.niallantony.AppTest" time="0.001" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.github.niallantony.EventListParserTest" time="0.009" tests="12" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -58,5 +58,16 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16|localhost|*.localhost|127.0.0.1:21300|*.127.0.0.1:21300|lx.astxsvc.com|*.lx.astxsvc.com"/>
     <property name="java.class.version" value="66.0"/>
   </properties>
-  <testcase name="shouldAnswerWithTrue" classname="com.github.niallantony.AppTest" time="0.001"/>
+  <testcase name="getActivity_WhenAskedToReturnMoreStringsThanAvailable_ReturnsOnlyAvailableStrings" classname="com.github.niallantony.EventListParserTest" time="0.001"/>
+  <testcase name="getAggregatedActivity_WhenGivenOneDistinctAndTwoSimilarEvents_ReturnsTwoEvents" classname="com.github.niallantony.EventListParserTest" time="0.0"/>
+  <testcase name="getActivity_WhenGivenTwoEvents_ReturnsTwoCorrectStrings" classname="com.github.niallantony.EventListParserTest" time="0.0"/>
+  <testcase name="parse_WhenGivenMisformedResponse_ThrowsIOException" classname="com.github.niallantony.EventListParserTest" time="0.002"/>
+  <testcase name="getAggregatedActivity_WhenGiven2Events_Returns2Events" classname="com.github.niallantony.EventListParserTest" time="0.0"/>
+  <testcase name="parse_WhenGivenEmptyList_ReturnsEmptyList" classname="com.github.niallantony.EventListParserTest" time="0.001"/>
+  <testcase name="getAggregatedActivity_WhenGivenEmptyList_ReturnsNoneFoundMessage" classname="com.github.niallantony.EventListParserTest" time="0.0"/>
+  <testcase name="getActivity_WhenGiventOneEvent_ReturnsCorrectString" classname="com.github.niallantony.EventListParserTest" time="0.001"/>
+  <testcase name="getAggregatedActivity_WhenGiven2SimilarEvents_Returns1Event" classname="com.github.niallantony.EventListParserTest" time="0.0"/>
+  <testcase name="getActivity_WhenAskedToReturnOneString_ReturnsOneStringOnly" classname="com.github.niallantony.EventListParserTest" time="0.001"/>
+  <testcase name="parse_WhenGivenTwoEvents_ReturnsTwoEvents" classname="com.github.niallantony.EventListParserTest" time="0.0"/>
+  <testcase name="parse_WhenGivenWellFormedResponse_ReturnsList" classname="com.github.niallantony.EventListParserTest" time="0.001"/>
 </testsuite>

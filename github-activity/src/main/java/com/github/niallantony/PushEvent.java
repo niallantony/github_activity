@@ -30,7 +30,9 @@ public class PushEvent extends GitEvent {
 
   @Override
   public void aggregate(GitEvent other) {
-    this.size = this.size + other.getAggregationData();
+    if (other.getType().equals(this.type)) {
+      this.size = this.size + other.getAggregationData();
+    }
   }
 
 }

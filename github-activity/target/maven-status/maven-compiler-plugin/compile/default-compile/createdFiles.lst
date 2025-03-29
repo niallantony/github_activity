@@ -1,4 +1,13 @@
+com/github/niallantony/DeleteEvent.class
 com/github/niallantony/CommandLinePrinter.class
-com/github/niallantony/ActivityGetter.class
+com/github/niallantony/IssuesEvent.class
+com/github/niallantony/EventListParser.class
+com/github/niallantony/EventAggregator.class
 com/github/niallantony/ActivityPrinter.class
+com/github/niallantony/PullRequestEvent.class
+com/github/niallantony/GitEvent.class
+com/github/niallantony/PushEvent.class
+com/github/niallantony/EventApiResponseGetter.class
 com/github/niallantony/App.class
+com/github/niallantony/CreateEvent.class
+com/github/niallantony/EventFactory.class
