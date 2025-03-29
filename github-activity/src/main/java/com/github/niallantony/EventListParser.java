@@ -1,12 +1,5 @@
 package com.github.niallantony;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse.BodyHandlers;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,42 +7,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ActivityGetter {
-  private String username;
+public class EventListParser {
   private ObjectMapper mapper = new ObjectMapper();
   private ArrayList<GitEvent> events = new ArrayList<>();
   private EventFactory factory = new EventFactory();
-  private String serverResponseBody;
-  private HttpClient client;
 
-  public ActivityGetter(String username) {
-    this.username = username;
-    this.client = HttpClient.newBuilder().build();
-  }
-
-  public ActivityGetter(String username, HttpClient client) {
-    this.username = username;
-    this.client = client;
-  }
-
-  public ActivityGetter sendRequest() {
-    try {
-      var uri = new URI(String.format("https://api.github.com/users/%s/events", this.username));
-      var request = HttpRequest.newBuilder(uri).build();
-
-      var response = this.client.send(request, BodyHandlers.ofString(Charset.defaultCharset()));
-      this.serverResponseBody = response.body();
-      return this;
-    } catch (IOException ex) {
-      System.err.println(ex);
-      return null;
-    } catch (URISyntaxException ex) {
-      System.err.println(ex);
-      return null;
-    } catch (InterruptedException ex) {
-      System.err.println(ex);
-      return null;
-    }
+  public EventListParser(String body) {
+    this.events = extractEvents(body);
   }
 
   private JsonNode getJsonRoot(String body) {
@@ -64,15 +28,20 @@ public class ActivityGetter {
     }
   }
 
-  public ActivityGetter json() {
-    JsonNode root = getJsonRoot(this.serverResponseBody);
+  private ArrayList<GitEvent> extractEvents(String body) {
+    ArrayList<GitEvent> list = new ArrayList<>();
+    JsonNode root = getJsonRoot(body);
     if (root.isArray()) {
       for (int i = 0; i < root.size(); i++) {
         GitEvent event = factory.create(root.get(i));
-        this.events.add(event);
+        list.add(event);
       }
     }
-    return this;
+    return list;
+  }
+
+  public ArrayList<GitEvent> getEvents() {
+    return this.events;
   }
 
   public ArrayList<String> getActivity(int limit) {

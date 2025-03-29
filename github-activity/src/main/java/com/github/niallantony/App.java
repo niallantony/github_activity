@@ -1,5 +1,8 @@
 package com.github.niallantony;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 /**
@@ -7,9 +10,27 @@ import java.util.ArrayList;
  */
 public class App {
   public static void main(String[] args) {
-    ActivityGetter getter = new ActivityGetter(args[0]);
-    ArrayList<String> activity = getter.sendRequest().json().getAggregatedActivity(5);
     CommandLinePrinter printer = new CommandLinePrinter();
-    printer.printAll(activity);
+
+    try {
+
+      EventApiResponseGetter getter = new EventApiResponseGetter(args[0]);
+      HttpResponse<String> response = getter.getResponse();
+      if (response.statusCode() == 200) {
+        EventListParser parser = new EventListParser(response.body());
+        ArrayList<String> activity = parser.getAggregatedActivity(3);
+        printer.printAll(activity);
+      } else {
+        System.err.println(String.format("ERROR: Status %d on username %s\n", response.statusCode(), args[0]));
+      }
+
+    } catch (IOException ex) {
+      System.err.println(ex);
+    } catch (InterruptedException ex) {
+      System.err.println(ex);
+    } catch (URISyntaxException ex) {
+      System.err.println(ex);
+    }
+
   }
 }
