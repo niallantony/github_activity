@@ -5,46 +5,164 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class TestUtils {
-  public static JsonNode getMockNode(String type) {
-    ObjectMapper mapper = new ObjectMapper();
-    ObjectNode mockGitEvent = mapper.createObjectNode();
-    mockGitEvent.put("id", "mockId");
-    mockGitEvent.put("type", type);
-    mockGitEvent.put("public", true);
-    mockGitEvent.put("created_at", "mockDate");
-    ObjectNode actorNode = mapper.createObjectNode();
-    actorNode.put("display_login", "mockUser");
-    mockGitEvent.set("actor", actorNode);
-    ObjectNode repoNode = mapper.createObjectNode();
-    repoNode.put("name", "mockRepo");
-    mockGitEvent.set("repo", repoNode);
-    ObjectNode payloadNode = mapper.createObjectNode();
-    payloadNode.put("size", 3);
-    payloadNode.put("description", "mockDescription");
-    payloadNode.put("ref", "mockRef");
-    payloadNode.put("ref_type", "mockRefType");
-    payloadNode.put("action", "mockAction");
-    ObjectNode pullRequestNode = mapper.createObjectNode();
-    pullRequestNode.put("title", "mockTitle");
-    ObjectNode headNode = mapper.createObjectNode();
-    ObjectNode headRepoNode = mapper.createObjectNode();
-    headRepoNode.put("full_name", "mockPullRepoName");
-    headNode.set("repo", headRepoNode);
-    pullRequestNode.set("head", headNode);
-    payloadNode.set("pull_request", pullRequestNode);
-    ObjectNode issueNode = mapper.createObjectNode();
-    issueNode.put("title", "mockIssueTitle");
-    payloadNode.set("issue", issueNode);
-    mockGitEvent.set("payload", payloadNode);
 
-    try {
+  static class MockNode {
+    ObjectMapper mapper;
+    ObjectNode mockGitEvent;
+    ObjectNode payloadNode;
 
-      String json = mapper.writer().writeValueAsString(mockGitEvent);
-      JsonNode root = mapper.readTree(json);
-      return root;
-    } catch (Exception ex) {
-      System.err.println(ex);
-      return null;
+    public MockNode(String type) {
+      this.mapper = new ObjectMapper();
+      this.mockGitEvent = mapper.createObjectNode();
+      this.mockGitEvent.put("id", "mockId");
+      this.mockGitEvent.put("type", type);
+      this.mockGitEvent.put("public", true);
+      this.mockGitEvent.put("created_at", "mockDate");
+      ObjectNode actorNode = mapper.createObjectNode();
+      actorNode.put("display_login", "mockUser");
+      this.mockGitEvent.set("actor", actorNode);
+      this.payloadNode = mapper.createObjectNode();
+      this.mockGitEvent.set("payload", this.payloadNode);
     }
+
+    public MockNode withRepo(String repo) {
+      ObjectNode repoNode = mapper.createObjectNode();
+      repoNode.put("name", repo);
+      mockGitEvent.set("repo", repoNode);
+      return this;
+    }
+
+    public MockNode withSize(int size) {
+      this.payloadNode.put("size", size);
+      return this;
+    }
+
+    public MockNode withDesc(String desc) {
+      this.payloadNode.put("description", desc);
+      return this;
+    }
+
+    public MockNode withRef(String ref) {
+      this.payloadNode.put("ref", ref);
+      return this;
+    }
+
+    public MockNode withRefType(String ref) {
+      this.payloadNode.put("ref_type", ref);
+      return this;
+    }
+
+    public MockNode withAction(String action) {
+      this.payloadNode.put("action", action);
+      return this;
+    }
+
+    public MockNode withPullRequest(String title, String repo) {
+      ObjectNode pullRequestNode = mapper.createObjectNode();
+      pullRequestNode.put("title", title);
+      ObjectNode headNode = mapper.createObjectNode();
+      ObjectNode headRepoNode = mapper.createObjectNode();
+      headRepoNode.put("full_name", repo);
+      headNode.set("repo", headRepoNode);
+      pullRequestNode.set("head", headNode);
+      this.payloadNode.set("pull_request", pullRequestNode);
+      return this;
+    }
+
+    public MockNode withIssue(String title) {
+      ObjectNode issueNode = mapper.createObjectNode();
+      issueNode.put("title", title);
+      this.payloadNode.set("issue", issueNode);
+      return this;
+    }
+
+    public JsonNode asJsonNode() {
+      try {
+        String json = this.mapper.writer().writeValueAsString(this.mockGitEvent);
+        JsonNode jsonRoot = this.mapper.readTree(json);
+        return jsonRoot;
+      } catch (Exception ex) {
+        System.err.println(ex);
+        return null;
+      }
+    }
+  }
+
+  public static JsonNode getMockNode(String type) {
+    MockNode base = new MockNode(type)
+        .withRepo("mockRepo")
+        .withDesc("mockDescription")
+        .withSize(3)
+        .withRef("mockRef")
+        .withRefType("mockRefType")
+        .withAction("mockAction")
+        .withPullRequest("mockTitle", "mockPullRepoName")
+        .withIssue("mockIssueTitle");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockNodeOfAction(String type, String action) {
+    MockNode base = new MockNode(type)
+        .withRepo("mockRepo")
+        .withDesc("mockDescription")
+        .withSize(3)
+        .withRef("mockRef")
+        .withRefType("mockRefType")
+        .withAction(action)
+        .withPullRequest("mockTitle", "mockPullRepoName")
+        .withIssue("mockIssueTitle");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockCreateMain() {
+    MockNode base = new MockNode("CreateEvent")
+        .withRepo("mockRepo")
+        .withDesc("mockDescription")
+        .withSize(3)
+        .withRef("main")
+        .withRefType("branch")
+        .withAction("mockAction")
+        .withPullRequest("mockTitle", "mockPullRepoName")
+        .withIssue("mockIssueTitle");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockNodeOfRef(String type, String ref) {
+    MockNode base = new MockNode(type)
+        .withRepo("mockRepo")
+        .withDesc("mockDescription")
+        .withSize(3)
+        .withRef(ref)
+        .withRefType("mockRefType")
+        .withAction("mockAction")
+        .withPullRequest("mockTitle", "mockPullRepoName")
+        .withIssue("mockIssueTitle");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockNodeOfRefType(String type, String ref) {
+    MockNode base = new MockNode(type)
+        .withRepo("mockRepo")
+        .withDesc("mockDescription")
+        .withSize(3)
+        .withRef("mockRef")
+        .withRefType(ref)
+        .withAction("mockAction")
+        .withPullRequest("mockTitle", "mockPullRepoName")
+        .withIssue("mockIssueTitle");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockNodeOfRepo(String type, String repo) {
+    MockNode base = new MockNode(type)
+        .withRepo(repo)
+        .withDesc("mockDescription")
+        .withSize(3)
+        .withRef("mockRef")
+        .withRefType("mockRefType")
+        .withAction("mockAction")
+        .withPullRequest("mockTitle", "mockPullRepoName")
+        .withIssue("mockIssueTitle");
+    return base.asJsonNode();
   }
 }
