@@ -46,11 +46,11 @@ public class PushEventTest {
     JsonNode event = TestUtils.getMockNode("PushEvent");
     JsonNode event2 = TestUtils.getMockNode("PushEvent");
     EventFactory factory = new EventFactory();
-    GitEvent gitEvent = factory.create(event);
+    PushEvent gitEvent = (PushEvent) factory.create(event);
     GitEvent gitEvent2 = factory.create(event2);
     gitEvent.aggregate(gitEvent2);
 
-    assertEquals(6, gitEvent.getAggregationData());
+    assertEquals(6, gitEvent.getSize());
     assertEquals("Pushed 6 commit(s) to mockRepo", gitEvent.toString());
   }
 
@@ -59,11 +59,11 @@ public class PushEventTest {
     JsonNode event = TestUtils.getMockNode("PushEvent");
     JsonNode event2 = TestUtils.getMockNode("PullEvent");
     EventFactory factory = new EventFactory();
-    GitEvent gitEvent = factory.create(event);
+    PushEvent gitEvent = (PushEvent) factory.create(event);
     GitEvent gitEvent2 = factory.create(event2);
     gitEvent.aggregate(gitEvent2);
 
-    assertEquals(3, gitEvent.getAggregationData());
+    assertEquals(3, gitEvent.getSize());
     assertEquals("Pushed 3 commit(s) to mockRepo", gitEvent.toString());
   }
 

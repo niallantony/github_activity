@@ -20,12 +20,8 @@ public class PullRequestEvent extends GitEvent {
     return String.format("Pull request action: %s, branch '%s' in repo %s", this.action, this.title, this.toRepo);
   }
 
-  @Override
-  public int getAggregationData() {
-    if (this.action.equals("opened")) {
-      return 1;
-    }
-    return 0;
+  public String getAction() {
+    return this.action;
   }
 
   public void setAction(String other) {
@@ -34,8 +30,11 @@ public class PullRequestEvent extends GitEvent {
 
   @Override
   public boolean isSimilar(GitEvent other) {
+    if (other.getClass() != PullRequestEvent.class)
+      return false;
+    PullRequestEvent previous = (PullRequestEvent) other;
     if (this.repo_name.equals(other.getRepo())
-        && other.getAggregationData() == 1
+        && previous.getAction().equals("opened")
         && this.action.equals("closed"))
       return true;
     return false;

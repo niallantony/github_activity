@@ -34,10 +34,6 @@ public class GitEvent {
     }
   }
 
-  public int getAggregationData() {
-    return 0;
-  }
-
   public String getRepo() {
     return this.repo_name;
   }

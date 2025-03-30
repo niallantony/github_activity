@@ -26,7 +26,6 @@ public class EventFactoryTest {
 
     assertEquals("mockRepo", gitEvent.getRepo());
     assertEquals("GenericEvent", gitEvent.getType());
-    assertEquals(0, gitEvent.getAggregationData());
     assertEquals("Event mockId: GenericEvent created at mockDate", gitEvent.toString());
   }
 
@@ -45,7 +44,6 @@ public class EventFactoryTest {
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals(3, gitEvent.getAggregationData());
     assertEquals("Pushed 3 commit(s) to mockRepo", gitEvent.toString());
   }
 

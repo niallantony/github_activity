@@ -20,21 +20,8 @@ public class DeleteEvent extends GitEvent {
     return String.format("Deleted %d %ss in repo: %s", this.aggregations, this.ref_type, this.repo_name);
   }
 
-  @Override
-  public int getAggregationData() {
-    return getRefCode(this.ref_type);
-  }
-
-  private int getRefCode(String ref_type) {
-    switch (ref_type) {
-      case "branch":
-        return 1;
-      case "tag":
-        return 2;
-      default:
-        return 0;
-    }
-
+  public String getRefCode() {
+    return this.ref_type;
   }
 
   public void setRefType(String type) {
@@ -43,8 +30,11 @@ public class DeleteEvent extends GitEvent {
 
   @Override
   public boolean isSimilar(GitEvent other) {
-    if (this.repo_name.equals(other.getRepo()) && this.type.equals(other.getType())
-        && getRefCode(this.ref_type) == other.getAggregationData()) {
+    if (other.getClass() != DeleteEvent.class)
+      return false;
+    DeleteEvent previous = (DeleteEvent) other;
+    if (this.repo_name.equals(other.getRepo())
+        && getRefCode() == previous.getRefCode()) {
       return true;
     }
     return false;
