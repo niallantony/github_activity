@@ -24,10 +24,6 @@ public class PullRequestEvent extends GitEvent {
     return this.action;
   }
 
-  public void setAction(String other) {
-    this.action = other;
-  }
-
   @Override
   public boolean isSimilar(GitEvent other) {
     if (other.getClass() != PullRequestEvent.class)

@@ -38,14 +38,6 @@ public class CreateEvent extends GitEvent {
     return refs;
   }
 
-  public void setRef(String newRef) {
-    this.ref = newRef;
-  }
-
-  public void setRefType(String newRef) {
-    this.ref_type = newRef;
-  }
-
   @Override
   public boolean isSimilar(GitEvent other) {
     if (other.getClass() != CreateEvent.class)

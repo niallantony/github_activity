@@ -24,10 +24,6 @@ public class DeleteEvent extends GitEvent {
     return this.ref_type;
   }
 
-  public void setRefType(String type) {
-    this.ref_type = type;
-  }
-
   @Override
   public boolean isSimilar(GitEvent other) {
     if (other.getClass() != DeleteEvent.class)
