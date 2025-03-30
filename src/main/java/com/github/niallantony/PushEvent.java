@@ -2,8 +2,10 @@ package com.github.niallantony;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import lombok.Getter;
+
 public class PushEvent extends GitEvent {
-  private int size;
+  private @Getter int size;
 
   public PushEvent(JsonNode event) {
     super(event);
@@ -21,10 +23,6 @@ public class PushEvent extends GitEvent {
       return true;
     }
     return false;
-  }
-
-  public int getSize() {
-    return this.size;
   }
 
   @Override

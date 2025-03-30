@@ -26,6 +26,7 @@ public class CreateEventTest {
     JsonNode event = TestUtils.getMockNode("CreateEvent");
     EventFactory factory = new EventFactory();
     CreateEvent gitEvent = (CreateEvent) factory.create(event);
+    String refs = Arrays.toString(gitEvent.getRefs());
 
     assertEquals("[mockRef, mockRefType]", Arrays.toString(gitEvent.getRefs()));
   }

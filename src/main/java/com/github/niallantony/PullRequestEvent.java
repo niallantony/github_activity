@@ -2,11 +2,13 @@ package com.github.niallantony;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import lombok.Getter;
+
 public class PullRequestEvent extends GitEvent {
 
   private String toRepo;
   private String title;
-  private String action;
+  private @Getter String action;
 
   public PullRequestEvent(JsonNode event) {
     super(event);
@@ -18,10 +20,6 @@ public class PullRequestEvent extends GitEvent {
   @Override
   public String toString() {
     return String.format("Pull request action: %s, branch '%s' in repo %s", this.action, this.title, this.toRepo);
-  }
-
-  public String getAction() {
-    return this.action;
   }
 
   @Override
