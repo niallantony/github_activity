@@ -62,7 +62,7 @@ public class EventFactoryTest {
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals("Created 'mockRepo': mockDescription", gitEvent.toString());
+    assertEquals("Created mockRefType mockRef in mockRepo", gitEvent.toString());
   }
 
   @Test

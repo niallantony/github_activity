@@ -2,6 +2,8 @@ package com.github.niallantony;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,6 +19,15 @@ public class CreateEventTest {
     GitEvent gitEvent2 = factory.create(event2);
 
     assertEquals(true, gitEvent.isSimilar(gitEvent2));
+  }
+
+  @Test
+  public void CreateEvent_WhenAskedForRefs_GivesRefArray() {
+    JsonNode event = TestUtils.getMockNode("CreateEvent");
+    EventFactory factory = new EventFactory();
+    CreateEvent gitEvent = (CreateEvent) factory.create(event);
+
+    assertEquals("[mockRef, mockRefType]", Arrays.toString(gitEvent.getRefs()));
   }
 
   @Test
@@ -39,5 +50,58 @@ public class CreateEventTest {
     gitEvent2.setRepo("anotherRepo");
 
     assertEquals(false, gitEvent.isSimilar(gitEvent2));
+  }
+
+  @Test
+  public void CreateEvent_WhenComparedToDifferentRef_ReturnsIsNotSimilar() {
+    JsonNode event = TestUtils.getMockNode("CreateEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+    CreateEvent gitEvent2 = (CreateEvent) factory.create(event);
+    gitEvent2.setRef("anotherRef");
+
+    assertEquals(false, gitEvent.isSimilar(gitEvent2));
+  }
+
+  @Test
+  public void CreateEvent_WhenComparedToDifferentRefType_ReturnsIsNotSimilar() {
+    JsonNode event = TestUtils.getMockNode("CreateEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+    CreateEvent gitEvent2 = (CreateEvent) factory.create(event);
+    gitEvent2.setRefType("anotherRefType");
+
+    assertEquals(false, gitEvent.isSimilar(gitEvent2));
+  }
+
+  @Test
+  public void CreateEvent_WhenReferringToMainBranch_IsIgnored() {
+    JsonNode event = TestUtils.getMockNode("CreateEvent");
+    EventFactory factory = new EventFactory();
+    CreateEvent gitEvent = (CreateEvent) factory.create(event);
+    gitEvent.setRef("main");
+    gitEvent.setRefType("branch");
+
+    assertEquals(true, gitEvent.shouldIgnore());
+  }
+
+  @Test
+  public void CreateEvent_WhenReferringToBranch_returnsCorrectString() {
+    JsonNode event = TestUtils.getMockNode("CreateEvent");
+    EventFactory factory = new EventFactory();
+    CreateEvent gitEvent = (CreateEvent) factory.create(event);
+    gitEvent.setRefType("branch");
+
+    assertEquals("Created branch mockRef in mockRepo", gitEvent.toString());
+  }
+
+  @Test
+  public void CreateEvent_WhenReferringToRepo_returnsCorrectString() {
+    JsonNode event = TestUtils.getMockNode("CreateEvent");
+    EventFactory factory = new EventFactory();
+    CreateEvent gitEvent = (CreateEvent) factory.create(event);
+    gitEvent.setRefType("repository");
+
+    assertEquals("Created 'mockRepo': mockDescription", gitEvent.toString());
   }
 }

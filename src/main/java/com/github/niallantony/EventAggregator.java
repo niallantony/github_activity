@@ -9,6 +9,8 @@ public class EventAggregator {
       throw new IndexOutOfBoundsException();
     GitEvent current = null;
     for (int i = 0; i < events.size(); i++) {
+      if (events.get(i).shouldIgnore())
+        continue;
       if (current == null) {
         current = events.get(i);
         continue;

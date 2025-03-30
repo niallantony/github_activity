@@ -42,6 +42,10 @@ public class GitEvent {
     return this.type;
   }
 
+  public boolean shouldIgnore() {
+    return false;
+  }
+
   public void setRepo(String repo) {
     this.repo_name = repo;
   }
