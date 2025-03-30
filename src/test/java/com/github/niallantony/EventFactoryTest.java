@@ -116,6 +116,6 @@ public class EventFactoryTest {
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals("mockAction issue on mockRepo: mockIssueTitle", gitEvent.toString());
+    assertEquals("MockAction issue on mockRepo: mockIssueTitle", gitEvent.toString());
   }
 }

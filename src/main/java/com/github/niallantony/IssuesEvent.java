@@ -15,6 +15,7 @@ public class IssuesEvent extends GitEvent {
   @Override
   public String toString() {
 
-    return String.format("%s issue on %s: %s", this.action, this.repo_name, this.title);
+    return String.format("%s issue on %s: %s", this.action.substring(0, 1).toUpperCase() + this.action.substring(1),
+        this.repo_name, this.title);
   }
 }
