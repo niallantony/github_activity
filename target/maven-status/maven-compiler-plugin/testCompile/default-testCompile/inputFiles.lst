@@ -1,6 +1,7 @@
 /Users/niallantony/Desktop/Niall/projects/github-activity/src/test/java/com/github/niallantony/AppTest.java
 /Users/niallantony/Desktop/Niall/projects/github-activity/src/test/java/com/github/niallantony/CreateEventTest.java
 /Users/niallantony/Desktop/Niall/projects/github-activity/src/test/java/com/github/niallantony/DeleteEventTest.java
+/Users/niallantony/Desktop/Niall/projects/github-activity/src/test/java/com/github/niallantony/EventAggregatorTest.java
 /Users/niallantony/Desktop/Niall/projects/github-activity/src/test/java/com/github/niallantony/EventFactoryTest.java
 /Users/niallantony/Desktop/Niall/projects/github-activity/src/test/java/com/github/niallantony/EventListParserTest.java
 /Users/niallantony/Desktop/Niall/projects/github-activity/src/test/java/com/github/niallantony/GitEventTest.java

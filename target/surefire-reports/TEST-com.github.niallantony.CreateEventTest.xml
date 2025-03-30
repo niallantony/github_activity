@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.github.niallantony.CreateEventTest" time="0.003" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.github.niallantony.CreateEventTest" time="0.01" tests="9" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -13,7 +13,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/Users/niallantony/Library/Java/JavaVirtualMachines/openjdk-22.0.1/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/niallantony/Desktop/Niall/projects/github-activity/target/surefire/surefirebooter-20250330140438876_3.jar /Users/niallantony/Desktop/Niall/projects/github-activity/target/surefire 2025-03-30T14-04-38_827-jvmRun1 surefire-20250330140438876_1tmp surefire_0-20250330140438876_2tmp"/>
+    <property name="sun.java.command" value="/Users/niallantony/Desktop/Niall/projects/github-activity/target/surefire/surefirebooter-20250330155257459_3.jar /Users/niallantony/Desktop/Niall/projects/github-activity/target/surefire 2025-03-30T15-52-57_406-jvmRun1 surefire-20250330155257459_1tmp surefire_0-20250330155257459_2tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16|localhost|*.localhost|127.0.0.1:21300|*.127.0.0.1:21300|lx.astxsvc.com|*.lx.astxsvc.com"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/niallantony/Desktop/Niall/projects/github-activity/target/test-classes:/Users/niallantony/Desktop/Niall/projects/github-activity/target/classes:/Users/niallantony/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.16.0/jackson-databind-2.16.0.jar:/Users/niallantony/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.16.0/jackson-annotations-2.16.0.jar:/Users/niallantony/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.16.0/jackson-core-2.16.0.jar:/Users/niallantony/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.11.0/junit-jupiter-api-5.11.0.jar:/Users/niallantony/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/niallantony/.m2/repository/org/junit/platform/junit-platform-commons/1.11.0/junit-platform-commons-1.11.0.jar:/Users/niallantony/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/niallantony/.m2/repository/org/mockito/mockito-core/5.16.1/mockito-core-5.16.1.jar:/Users/niallantony/.m2/repository/net/bytebuddy/byte-buddy/1.15.11/byte-buddy-1.15.11.jar:/Users/niallantony/.m2/repository/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar:/Users/niallantony/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/niallantony/.m2/repository/jakarta/json/jakarta.json-api/2.1.3/jakarta.json-api-2.1.3.jar:/Users/niallantony/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.11.0/junit-jupiter-params-5.11.0.jar:"/>
@@ -30,7 +30,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/niallantony/Desktop/Niall/projects/github-activity/target/surefire/surefirebooter-20250330140438876_3.jar"/>
+    <property name="surefire.real.class.path" value="/Users/niallantony/Desktop/Niall/projects/github-activity/target/surefire/surefirebooter-20250330155257459_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16|localhost|*.localhost|127.0.0.1:21300|*.127.0.0.1:21300|lx.astxsvc.com|*.lx.astxsvc.com"/>
     <property name="java.runtime.version" value="22.0.1+8-16"/>
@@ -59,6 +59,12 @@
     <property name="java.class.version" value="66.0"/>
   </properties>
   <testcase name="CreateEvent_WhenComparedToDifferentRepo_ReturnsIsNotSimilar" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
+  <testcase name="CreateEvent_WhenComparedToDifferentRef_ReturnsIsNotSimilar" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
+  <testcase name="CreateEvent_WhenReferringToBranch_returnsCorrectString" classname="com.github.niallantony.CreateEventTest" time="0.0"/>
   <testcase name="CreateEvent_WhenComparedToDifferentEvent_ReturnsIsNotSimilar" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
+  <testcase name="CreateEvent_WhenReferringToMainBranch_IsIgnored" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
   <testcase name="CreateEvent_WhenComparedToSimilarEvent_ReturnsIsSimilar" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
+  <testcase name="CreateEvent_WhenAskedForRefs_GivesRefArray" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
+  <testcase name="CreateEvent_WhenComparedToDifferentRefType_ReturnsIsNotSimilar" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
+  <testcase name="CreateEvent_WhenReferringToRepo_returnsCorrectString" classname="com.github.niallantony.CreateEventTest" time="0.001"/>
 </testsuite>
