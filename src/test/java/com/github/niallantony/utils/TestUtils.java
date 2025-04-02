@@ -1,8 +1,12 @@
 package com.github.niallantony.utils;
 
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.niallantony.GitEvent;
+import com.github.niallantony.PushEvent;
 
 public class TestUtils {
 
@@ -101,6 +105,19 @@ public class TestUtils {
     return base.asJsonNode();
   }
 
+  public static JsonNode getMockPushNodeOfSize(int size) {
+    MockNode base = new MockNode("PushEvent")
+        .withRepo("mockRepo")
+        .withDesc("mockDescription")
+        .withSize(size)
+        .withRef("mockRef")
+        .withRefType("mockRefType")
+        .withAction("mockAction")
+        .withPullRequest("mockTitle", "mockPullRepoName")
+        .withIssue("mockIssueTitle");
+    return base.asJsonNode();
+  }
+
   public static JsonNode getMockNodeOfAction(String type, String action) {
     MockNode base = new MockNode(type)
         .withRepo("mockRepo")
@@ -165,4 +182,35 @@ public class TestUtils {
         .withIssue("mockIssueTitle");
     return base.asJsonNode();
   }
+
+  public static ArrayList<GitEvent> getPushEventsWithSameRepoOfSizes(int[] sizes) {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    for (int i = 0; i < sizes.length; i++) {
+      JsonNode node = getMockPushNodeOfSize(sizes[i]);
+      PushEvent event = new PushEvent(node);
+      events.add(event);
+    }
+    return events;
+  }
+
+  public static ArrayList<GitEvent> getPushEventsWithDifferentRepos(String[] repos) {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    for (int i = 0; i < repos.length; i++) {
+      JsonNode node = getMockNodeOfRepo("PushEvent", repos[i]);
+      PushEvent event = new PushEvent(node);
+      events.add(event);
+    }
+    return events;
+  }
+
+  public static ArrayList<GitEvent> getEventsOfDifferentTypes(String[] types) {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    for (int i = 0; i < types.length; i++) {
+      JsonNode node = getMockNode(types[i]);
+      GitEvent event = new GitEvent(node);
+      events.add(event);
+    }
+    return events;
+  }
+
 }

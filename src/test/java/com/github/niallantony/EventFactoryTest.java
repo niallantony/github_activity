@@ -98,7 +98,7 @@ public class EventFactoryTest {
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals("Pull request action: mockAction, branch 'mockTitle' in repo mockPullRepoName", gitEvent.toString());
+    assertEquals("Pull request action: mockAction branch 'mockTitle' in repo mockPullRepoName", gitEvent.toString());
   }
 
   @Test

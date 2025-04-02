@@ -38,9 +38,9 @@ public class CreateEvent extends GitEvent {
   public boolean isSimilar(GitEvent other) {
     if (other.getClass() != CreateEvent.class)
       return false;
-    CreateEvent previous = (CreateEvent) other;
+    CreateEvent next = (CreateEvent) other;
     if (this.repo_name.equals(other.getRepo())
-        && Arrays.toString(previous.getRefs()).equals(String.format("[%s, %s]", this.refs[0], this.refs[1])))
+        && Arrays.toString(next.getRefs()).equals(String.format("[%s, %s]", this.refs[0], this.refs[1])))
       return true;
     return false;
   }

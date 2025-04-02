@@ -28,8 +28,8 @@ public class PushEvent extends GitEvent {
   @Override
   public void aggregate(GitEvent other) {
     if (other.getClass() == PushEvent.class) {
-      PushEvent previous = (PushEvent) other;
-      this.size = this.size + previous.getSize();
+      PushEvent next = (PushEvent) other;
+      this.size = this.size + next.getSize();
     }
   }
 

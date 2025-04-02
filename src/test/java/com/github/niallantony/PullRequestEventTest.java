@@ -10,8 +10,8 @@ import com.github.niallantony.utils.TestUtils;
 public class PullRequestEventTest {
   @Test
   public void PullRequestEvent_WhenComparedToSimilarEvent_ReturnsSimilar() {
-    JsonNode event = TestUtils.getMockNodeOfAction("PullRequestEvent", "opened");
-    JsonNode event2 = TestUtils.getMockNodeOfAction("PullRequestEvent", "closed");
+    JsonNode event = TestUtils.getMockNodeOfAction("PullRequestEvent", "closed");
+    JsonNode event2 = TestUtils.getMockNodeOfAction("PullRequestEvent", "opened");
     EventFactory factory = new EventFactory();
     PullRequestEvent gitEvent = (PullRequestEvent) factory.create(event);
     PullRequestEvent gitEvent2 = (PullRequestEvent) factory.create(event2);

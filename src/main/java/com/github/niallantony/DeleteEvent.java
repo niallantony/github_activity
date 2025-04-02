@@ -26,9 +26,9 @@ public class DeleteEvent extends GitEvent {
   public boolean isSimilar(GitEvent other) {
     if (other.getClass() != DeleteEvent.class)
       return false;
-    DeleteEvent previous = (DeleteEvent) other;
+    DeleteEvent next = (DeleteEvent) other;
     if (this.repo_name.equals(other.getRepo())
-        && getRefType() == previous.getRefType()) {
+        && getRefType().equals(next.getRefType())) {
       return true;
     }
     return false;
