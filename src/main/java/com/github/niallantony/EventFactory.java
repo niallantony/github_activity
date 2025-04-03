@@ -17,6 +17,7 @@ public class EventFactory {
       case "IssuesEvent":
         return new IssuesEvent(event);
       case "CommitCommentEvent":
+        return new CommitCommentEvent(event);
       case "ForkEvent":
       case "GollumEvent":
       case "IssueCommentEvent":
