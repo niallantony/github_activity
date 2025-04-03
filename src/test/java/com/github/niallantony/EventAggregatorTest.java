@@ -141,11 +141,49 @@ public class EventAggregatorTest {
     assertEquals(1, aggregated.size());
   }
 
+  @Test
+  public void aggregator_WhenGivenAdjacentCommitComments_ReturnsBoth() {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    GitEvent comCom1 = new CommitCommentEvent(TestUtils.getMockCommitComment("mockComment"));
+    GitEvent comCom2 = new CommitCommentEvent(TestUtils.getMockCommitComment("mockComment"));
+    events.add(comCom1);
+    events.add(comCom2);
+
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+    assertEquals("Made a comment on a commit in mockRepo. It said: mockComment",
+        aggregated.get(0).toString());
+    assertEquals(2, aggregated.size());
+  }
+
+  @Test
+  public void aggregator_WhenGivenAdjacentForkEventsOnSameRepo_OnlyReturnsOne() {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    GitEvent fork1 = new ForkEvent(TestUtils.getMockNode("ForkEvent"));
+    GitEvent fork2 = new ForkEvent(TestUtils.getMockNode("ForkEvent"));
+    events.add(fork1);
+    events.add(fork2);
+
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+    assertEquals(1, aggregated.size());
+  }
+
+  @Test
+  public void aggregator_WhenGivenAdjacentForkEventsOnDifferentRepo_ReturnsBoth() {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    GitEvent fork1 = new ForkEvent(TestUtils.getMockNodeOfRepo("ForkEvent", "repo1"));
+    GitEvent fork2 = new ForkEvent(TestUtils.getMockNodeOfRepo("ForkEvent", "repo2"));
+    events.add(fork1);
+    events.add(fork2);
+
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+    assertEquals(2, aggregated.size());
+  }
+
   @ParameterizedTest
-  @MethodSource("eventsOfType")
+  @MethodSource("genericEventsOfType")
   public void aggregator_WhenGivenEventsOfTypes_AggregatesAppropriately(String[] types, int finalSize,
       String firstString) {
-    ArrayList<GitEvent> events = TestUtils.getEventsOfDifferentTypes(types);
+    ArrayList<GitEvent> events = TestUtils.getGitEventsOfDifferentTypes(types);
     ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
 
     assertEquals(finalSize, aggregated.size());
@@ -172,16 +210,16 @@ public class EventAggregatorTest {
 
   }
 
-  private static Stream<Arguments> eventsOfType() {
-    String[] repos1 = { "GollumEvent", "GollumEvent", "GollumEvent" };
-    String[] repos2 = { "GollumEvent", "ForkEvent", "GollumEvent" };
-    String[] repos3 = { "ForkEvent", "ForkEvent", "GollumEvent" };
-    String[] repos4 = { "GollumEvent", "ForkEvent", "WatchEvent" };
+  private static Stream<Arguments> genericEventsOfType() {
+    String[] repos1 = { "GitEvent1", "GitEvent1", "GitEvent1" };
+    String[] repos2 = { "GitEvent1", "GitEvent2", "GitEvent1" };
+    String[] repos3 = { "GitEvent2", "GitEvent2", "GitEvent1" };
+    String[] repos4 = { "GitEvent1", "GitEvent2", "GitEvent3" };
     return Stream.of(
-        Arguments.arguments(repos1, 1, "3 GollumEvent events created at mockDate"),
-        Arguments.arguments(repos2, 3, "Event mockId: GollumEvent created at mockDate"),
-        Arguments.arguments(repos3, 2, "2 ForkEvent events created at mockDate"),
-        Arguments.arguments(repos4, 3, "Event mockId: GollumEvent created at mockDate"));
+        Arguments.arguments(repos1, 1, "3 GitEvent1 events created at mockDate"),
+        Arguments.arguments(repos2, 3, "Event mockId: GitEvent1 created at mockDate"),
+        Arguments.arguments(repos3, 2, "2 GitEvent2 events created at mockDate"),
+        Arguments.arguments(repos4, 3, "Event mockId: GitEvent1 created at mockDate"));
 
   }
 

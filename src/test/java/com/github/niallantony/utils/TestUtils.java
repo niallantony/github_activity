@@ -217,7 +217,7 @@ public class TestUtils {
     return events;
   }
 
-  public static ArrayList<GitEvent> getEventsOfDifferentTypes(String[] types) {
+  public static ArrayList<GitEvent> getGitEventsOfDifferentTypes(String[] types) {
     ArrayList<GitEvent> events = new ArrayList<>();
     for (int i = 0; i < types.length; i++) {
       JsonNode node = getMockNode(types[i]);

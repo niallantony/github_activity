@@ -136,4 +136,23 @@ public class EventFactoryTest {
 
     assertEquals("Made a comment on a commit in mockRepo. It said: mockComment", gitEvent.toString());
   }
+
+  @Test
+  public void EventFactory_WhenGivenForkEvent_ReturnsForkEvent() {
+    JsonNode event = TestUtils.getMockNode("ForkEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(ForkEvent.class, gitEvent.getClass());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenForkEvent_ReturnsWellFormedForkEvent() {
+    JsonNode event = TestUtils.getMockNode("ForkEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Forked a repo: mockRepo", gitEvent.toString());
+  }
+
 }
