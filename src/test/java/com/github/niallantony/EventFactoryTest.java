@@ -118,4 +118,22 @@ public class EventFactoryTest {
 
     assertEquals("MockAction issue on mockRepo: mockIssueTitle", gitEvent.toString());
   }
+
+  @Test
+  public void EventFactory_WhenGivenCommitCommentEvent_ReturnsCommitCommentEvent() {
+    JsonNode event = TestUtils.getMockCommitComment("mockComment");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(CommitCommentEvent.class, gitEvent.getClass());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenCommitCommentEvent_ReturnsWellFormedCommitCommentEvent() {
+    JsonNode event = TestUtils.getMockCommitComment("mockComment");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Made a comment on mockRepo. It said: mockComment", gitEvent.toString());
+  }
 }

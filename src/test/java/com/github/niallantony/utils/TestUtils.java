@@ -73,6 +73,13 @@ public class TestUtils {
       return this;
     }
 
+    public MockNode withCommitComment(String comment) {
+      ObjectNode commentNode = mapper.createObjectNode();
+      commentNode.put("body", comment);
+      this.payloadNode.set("comment", commentNode);
+      return this;
+    }
+
     public MockNode withIssue(String title) {
       ObjectNode issueNode = mapper.createObjectNode();
       issueNode.put("title", title);
@@ -180,6 +187,13 @@ public class TestUtils {
         .withAction("mockAction")
         .withPullRequest("mockTitle", "mockPullRepoName")
         .withIssue("mockIssueTitle");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockCommitComment(String comment) {
+    MockNode base = new MockNode("CommitCommentEvent")
+        .withCommitComment("mockComment")
+        .withRepo("mockRepo");
     return base.asJsonNode();
   }
 
