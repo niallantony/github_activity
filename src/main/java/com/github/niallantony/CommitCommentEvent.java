@@ -19,6 +19,6 @@ public class CommitCommentEvent extends GitEvent {
 
   @Override
   public String toString() {
-    return String.format("Made a comment on %s. It said: %s", this.repo_name, this.comment);
+    return String.format("Made a comment on a commit in %s. It said: %s", this.repo_name, this.comment);
   }
 }

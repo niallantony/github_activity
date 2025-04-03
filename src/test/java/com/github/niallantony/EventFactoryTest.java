@@ -134,6 +134,6 @@ public class EventFactoryTest {
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals("Made a comment on mockRepo. It said: mockComment", gitEvent.toString());
+    assertEquals("Made a comment on a commit in mockRepo. It said: mockComment", gitEvent.toString());
   }
 }
