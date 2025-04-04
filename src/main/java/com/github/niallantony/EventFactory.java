@@ -22,6 +22,8 @@ public class EventFactory {
         return new ForkEvent(event);
       case "GollumEvent":
         return new GollumEvent(event);
+      case "WatchEvent":
+        return new WatchEvent(event);
       case "IssueCommentEvent":
       case "MemberEvent":
       case "PublicEvent":
@@ -30,7 +32,6 @@ public class EventFactory {
       case "PullRequestReviewThreadEvent":
       case "ReleaseEvent":
       case "SponsorshipEvent":
-      case "WatchEvent":
       default:
         return new GitEvent(event);
     }
