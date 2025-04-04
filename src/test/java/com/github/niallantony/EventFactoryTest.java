@@ -157,20 +157,37 @@ public class EventFactoryTest {
 
   @Test
   public void EventFactory_WhenGivenGollumEvent_ReturnsGollumEvent() {
-    JsonNode event = TestUtils.getMockNode("ForkEvent");
+    JsonNode event = TestUtils.getMockGollumNode("mockRepo", 3);
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals(ForkEvent.class, gitEvent.getClass());
+    assertEquals(GollumEvent.class, gitEvent.getClass());
   }
 
   @Test
   public void EventFactory_WhenGivenGollumEvent_ReturnsWellFormedGollumEvent() {
-    JsonNode event = TestUtils.getMockNode("ForkEvent");
+    JsonNode event = TestUtils.getMockGollumNode("mockRepo", 3);
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals("Forked a repo: mockRepo", gitEvent.toString());
+    assertEquals("Updated 3 pages on a Wiki in mockRepo", gitEvent.toString());
   }
 
+  @Test
+  public void EventFactory_WhenGivenWatchEvent_ReturnsWellFormedWatchEvent() {
+    JsonNode event = TestUtils.getMockNode("WatchEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Watched repo: mockRepo", gitEvent.toString());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenWatchEvent_ReturnsWatchEvent() {
+    JsonNode event = TestUtils.getMockNode("WatchEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(WatchEvent.class, gitEvent.getClass());
+  }
 }

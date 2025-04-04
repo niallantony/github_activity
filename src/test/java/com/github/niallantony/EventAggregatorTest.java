@@ -2,6 +2,7 @@ package com.github.niallantony;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -11,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.events.Event;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.niallantony.utils.TestUtils;
 
 public class EventAggregatorTest {
@@ -209,6 +211,33 @@ public class EventAggregatorTest {
 
     assertEquals(finalSize, aggregated.size());
     assertEquals(firstString, aggregated.get(0).toString());
+  }
+
+  @Test
+  public void aggregator_WhenGivenWatchEventsOfSameRepo_OnlyReturnsOne() {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    JsonNode watchNode = TestUtils.getMockNode("WatchEvent");
+    GitEvent watch1 = new WatchEvent(watchNode);
+    GitEvent watch2 = new WatchEvent(watchNode);
+    events.add(watch1);
+    events.add(watch2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+  }
+
+  @Test
+  public void aggregator_WhenGivenWatchEventsOfDifferentRepos_ReturnsBoth() {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    JsonNode watchNode = TestUtils.getMockNode("WatchEvent");
+    JsonNode watchNode2 = TestUtils.getMockNodeOfRepo("WatchEvent", "repo2");
+    GitEvent watch1 = new WatchEvent(watchNode);
+    GitEvent watch2 = new WatchEvent(watchNode2);
+    events.add(watch1);
+    events.add(watch2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
   }
 
   private static Stream<Arguments> pushEventsOfSize() {
