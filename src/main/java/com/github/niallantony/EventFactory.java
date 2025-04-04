@@ -21,6 +21,7 @@ public class EventFactory {
       case "ForkEvent":
         return new ForkEvent(event);
       case "GollumEvent":
+        return new GollumEvent(event);
       case "IssueCommentEvent":
       case "MemberEvent":
       case "PublicEvent":
