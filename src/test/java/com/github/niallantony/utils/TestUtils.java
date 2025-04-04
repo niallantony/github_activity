@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.niallantony.GitEvent;
+import com.github.niallantony.GollumEvent;
 import com.github.niallantony.PushEvent;
 
 public class TestUtils {
@@ -58,6 +60,16 @@ public class TestUtils {
 
     public MockNode withAction(String action) {
       this.payloadNode.put("action", action);
+      return this;
+    }
+
+    public MockNode withPages(int length) {
+      ArrayNode pages = mapper.createArrayNode();
+      for (int i = 0; i < length; i++) {
+        JsonNode page = mapper.createObjectNode();
+        pages.add(page);
+      }
+      this.payloadNode.set("pages", pages);
       return this;
     }
 
@@ -197,6 +209,13 @@ public class TestUtils {
     return base.asJsonNode();
   }
 
+  public static JsonNode getMockGollumNode(String repo, int pages) {
+    MockNode base = new MockNode("GollumEvent")
+        .withPages(pages)
+        .withRepo(repo);
+    return base.asJsonNode();
+  }
+
   public static ArrayList<GitEvent> getPushEventsWithSameRepoOfSizes(int[] sizes) {
     ArrayList<GitEvent> events = new ArrayList<>();
     for (int i = 0; i < sizes.length; i++) {
@@ -207,11 +226,31 @@ public class TestUtils {
     return events;
   }
 
+  public static ArrayList<GitEvent> getGollumEventsWithOfPagesSize(int[] sizes) {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    for (int i = 0; i < sizes.length; i++) {
+      JsonNode node = getMockGollumNode("mockRepo", sizes[i]);
+      GollumEvent event = new GollumEvent(node);
+      events.add(event);
+    }
+    return events;
+  }
+
   public static ArrayList<GitEvent> getPushEventsWithDifferentRepos(String[] repos) {
     ArrayList<GitEvent> events = new ArrayList<>();
     for (int i = 0; i < repos.length; i++) {
       JsonNode node = getMockNodeOfRepo("PushEvent", repos[i]);
       PushEvent event = new PushEvent(node);
+      events.add(event);
+    }
+    return events;
+  }
+
+  public static ArrayList<GitEvent> getGollumEventsWithDifferentRepos(String[] repos) {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    for (int i = 0; i < repos.length; i++) {
+      JsonNode node = getMockGollumNode(repos[i], 3);
+      GollumEvent event = new GollumEvent(node);
       events.add(event);
     }
     return events;

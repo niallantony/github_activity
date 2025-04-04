@@ -180,6 +180,27 @@ public class EventAggregatorTest {
   }
 
   @ParameterizedTest
+  @MethodSource("gollumEventsOfSize")
+  public void aggregator_WhenGivenGollumEventsOfSizes_AggregatesCorrectly(int[] sizes) {
+    ArrayList<GitEvent> events = TestUtils.getGollumEventsWithOfPagesSize(sizes);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+  }
+
+  @ParameterizedTest(name = "repos: {0} are size {1} - with first event at {2} pages")
+  @MethodSource("gollumEventsOfRepo")
+  public void aggregator_WhenGivenGollumEventsOfVariousRepos_AggregatesAppropriately(String[] repos, int finalSize,
+      int firstPages) {
+    ArrayList<GitEvent> events = TestUtils.getGollumEventsWithDifferentRepos(repos);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+    GollumEvent first = (GollumEvent) aggregated.get(0);
+
+    assertEquals(finalSize, aggregated.size());
+    assertEquals(firstPages, first.getPages());
+  }
+
+  @ParameterizedTest
   @MethodSource("genericEventsOfType")
   public void aggregator_WhenGivenEventsOfTypes_AggregatesAppropriately(String[] types, int finalSize,
       String firstString) {
@@ -197,6 +218,13 @@ public class EventAggregatorTest {
     return Stream.of(Arguments.arguments(sizes1, 8), Arguments.arguments(sizes2, 11), Arguments.arguments(sizes3, 3));
   }
 
+  private static Stream<Arguments> gollumEventsOfSize() {
+    int[] sizes1 = { 1, 3, 4 };
+    int[] sizes2 = { 4, 3, 4 };
+    int[] sizes3 = { 1, 1, 1 };
+    return Stream.of(Arguments.arguments(sizes1, 8), Arguments.arguments(sizes2, 11), Arguments.arguments(sizes3, 3));
+  }
+
   private static Stream<Arguments> pushEventsOfRepo() {
     String[] repos1 = { "repo1", "repo1", "repo1" };
     String[] repos2 = { "repo1", "repo2", "repo1" };
@@ -207,7 +235,18 @@ public class EventAggregatorTest {
         Arguments.arguments(repos2, 3),
         Arguments.arguments(repos3, 2),
         Arguments.arguments(repos4, 3));
+  }
 
+  private static Stream<Arguments> gollumEventsOfRepo() {
+    String[] repos1 = { "repo1", "repo1", "repo1" };
+    String[] repos2 = { "repo1", "repo2", "repo1" };
+    String[] repos3 = { "repo2", "repo2", "repo1" };
+    String[] repos4 = { "repo1", "repo2", "repo3" };
+    return Stream.of(
+        Arguments.arguments(repos1, 1, 9),
+        Arguments.arguments(repos2, 3, 3),
+        Arguments.arguments(repos3, 2, 6),
+        Arguments.arguments(repos4, 3, 3));
   }
 
   private static Stream<Arguments> genericEventsOfType() {

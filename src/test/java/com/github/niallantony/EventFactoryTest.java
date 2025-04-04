@@ -155,4 +155,22 @@ public class EventFactoryTest {
     assertEquals("Forked a repo: mockRepo", gitEvent.toString());
   }
 
+  @Test
+  public void EventFactory_WhenGivenGollumEvent_ReturnsGollumEvent() {
+    JsonNode event = TestUtils.getMockNode("ForkEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(ForkEvent.class, gitEvent.getClass());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenGollumEvent_ReturnsWellFormedGollumEvent() {
+    JsonNode event = TestUtils.getMockNode("ForkEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Forked a repo: mockRepo", gitEvent.toString());
+  }
+
 }
