@@ -3,6 +3,13 @@ package com.github.niallantony;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class EventFactory {
+  /**
+   * Factory for returning objects of the correct event.
+   * 
+   * @param event A Json representation of the Github Event as retrieved from the
+   *              API
+   * @return An event class corresponding to the correct Event
+   */
   public GitEvent create(JsonNode event) {
     String type = event.get("type").asText();
     switch (type) {
@@ -32,10 +39,12 @@ public class EventFactory {
         return new PublicEvent(event);
       case "ReleaseEvent":
         return new ReleaseEvent(event);
+      case "SponsorshipEvent":
+        return new SponsorshipEvent(event);
       case "PullRequestReviewEvent":
+        return new PullRequestReviewEvent(event);
       case "PullRequestReviewCommentEvent":
       case "PullRequestReviewThreadEvent":
-      case "SponsorshipEvent":
       default:
         return new GitEvent(event);
     }

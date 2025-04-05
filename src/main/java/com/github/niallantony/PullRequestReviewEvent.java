@@ -20,9 +20,9 @@ public class PullRequestReviewEvent extends GitEvent {
 
   @Override
   public boolean isSimilar(GitEvent other) {
-    if (other.getClass() != PullRequestEvent.class)
+    if (other.getClass() != PullRequestReviewEvent.class)
       return false;
-    PullRequestEvent next = (PullRequestEvent) other;
+    PullRequestReviewEvent next = (PullRequestReviewEvent) other;
     if (this.repo_name.equals(other.getRepo())
         && next.getTitle().equals(this.title))
       return true;

@@ -351,6 +351,49 @@ public class EventAggregatorTest {
     assertEquals("Published mockRepo: mockRelease2", aggregated.get(1).toString());
   }
 
+  @Test
+  public void aggregator_whenGivenPullRequestReviewEventsOfSameTitles_returnsOne() {
+    JsonNode node = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewEvent", "mockTitle");
+    PullRequestReviewEvent event1 = new PullRequestReviewEvent(node);
+    PullRequestReviewEvent event2 = new PullRequestReviewEvent(node);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+  }
+
+  @Test
+  public void aggregator_whenGivenPullRequestReviewEventsWithDifferentPullRequests_returnsBoth() {
+    JsonNode node = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewEvent", "title1");
+    JsonNode node2 = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewEvent", "title2");
+    PullRequestReviewEvent event1 = new PullRequestReviewEvent(node);
+    PullRequestReviewEvent event2 = new PullRequestReviewEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Reviewed a pull request in mockRepo: title2", aggregated.get(1).toString());
+  }
+
+  @Test
+  public void aggregator_whenGivenPullRequestReviewEventsWithDifferentRepos_returnsBoth() {
+    JsonNode node = TestUtils.getMockNodeOfRepo("PullRequestReviewEvent", "repo1");
+    JsonNode node2 = TestUtils.getMockNodeOfRepo("PullRequestReviewEvent", "repo2");
+    PullRequestReviewEvent event1 = new PullRequestReviewEvent(node);
+    PullRequestReviewEvent event2 = new PullRequestReviewEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Reviewed a pull request in repo2: mockTitle", aggregated.get(1).toString());
+  }
+
   private static Stream<Arguments> pushEventsOfSize() {
     int[] sizes1 = { 1, 3, 4 };
     int[] sizes2 = { 4, 3, 4 };

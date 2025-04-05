@@ -219,6 +219,13 @@ public class TestUtils {
     return base.asJsonNode();
   }
 
+  public static JsonNode getMockPullRequesNodeOfTitle(String type, String title) {
+    MockNode base = new MockNode(type)
+        .withRepo("mockRepo")
+        .withPullRequest(title, "mockRepo");
+    return base.asJsonNode();
+  }
+
   public static JsonNode getMockGollumNode(String repo, int pages) {
     MockNode base = new MockNode("GollumEvent")
         .withPages(pages)
