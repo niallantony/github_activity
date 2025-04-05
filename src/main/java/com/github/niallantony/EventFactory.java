@@ -30,10 +30,11 @@ public class EventFactory {
         return new MemberEvent(event);
       case "PublicEvent":
         return new PublicEvent(event);
+      case "ReleaseEvent":
+        return new ReleaseEvent(event);
       case "PullRequestReviewEvent":
       case "PullRequestReviewCommentEvent":
       case "PullRequestReviewThreadEvent":
-      case "ReleaseEvent":
       case "SponsorshipEvent":
       default:
         return new GitEvent(event);

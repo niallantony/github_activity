@@ -81,6 +81,13 @@ public class TestUtils {
       return this;
     }
 
+    public MockNode withRelease(String name) {
+      ObjectNode release = mapper.createObjectNode();
+      release.put("name", name);
+      this.payloadNode.set("release", release);
+      return this;
+    }
+
     public MockNode withPullRequest(String title, String repo) {
       ObjectNode pullRequestNode = mapper.createObjectNode();
       pullRequestNode.put("title", title);
@@ -243,6 +250,13 @@ public class TestUtils {
     MockNode base = new MockNode("MemberEvent")
         .withUser(name)
         .withRepo(repo);
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockReleaseNode(String repo, String release) {
+    MockNode base = new MockNode("ReleaseEvent")
+        .withRepo(repo)
+        .withRelease(release);
     return base.asJsonNode();
   }
 

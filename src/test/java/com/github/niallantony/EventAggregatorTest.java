@@ -308,6 +308,49 @@ public class EventAggregatorTest {
     assertEquals(2, aggregated.size());
   }
 
+  @Test
+  public void aggregator_whenGivenIdentialReleaseEvents_returnsOne() {
+    JsonNode node = TestUtils.getMockReleaseNode("mockRepo", "mockRelease");
+    ReleaseEvent event1 = new ReleaseEvent(node);
+    ReleaseEvent event2 = new ReleaseEvent(node);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+  }
+
+  @Test
+  public void aggregator_whenGivenReleaseEventsWithDifferentRepos_returnsBoth() {
+    JsonNode node = TestUtils.getMockReleaseNode("mockRepo", "mockRelease");
+    JsonNode node2 = TestUtils.getMockReleaseNode("mockRepo2", "mockRelease");
+    ReleaseEvent event1 = new ReleaseEvent(node);
+    ReleaseEvent event2 = new ReleaseEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Published mockRepo: mockRelease", aggregated.get(0).toString());
+  }
+
+  @Test
+  public void aggregator_whenGivenReleaseEventsWithDifferentReleases_returnsBoth() {
+    JsonNode node = TestUtils.getMockReleaseNode("mockRepo", "mockRelease");
+    JsonNode node2 = TestUtils.getMockReleaseNode("mockRepo", "mockRelease2");
+    ReleaseEvent event1 = new ReleaseEvent(node);
+    ReleaseEvent event2 = new ReleaseEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Published mockRepo: mockRelease2", aggregated.get(1).toString());
+  }
+
   private static Stream<Arguments> pushEventsOfSize() {
     int[] sizes1 = { 1, 3, 4 };
     int[] sizes2 = { 4, 3, 4 };

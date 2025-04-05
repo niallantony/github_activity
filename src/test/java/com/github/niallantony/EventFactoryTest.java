@@ -244,4 +244,22 @@ public class EventFactoryTest {
 
     assertEquals("Made repo 'mockRepo' public", gitEvent.toString());
   }
+
+  @Test
+  public void EventFactory_WhenGivenReleaseEvent_ReturnsReleaseEvent() {
+    JsonNode event = TestUtils.getMockReleaseNode("mockRepo", "mockRelease");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(ReleaseEvent.class, gitEvent.getClass());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenReleaseEvent_ReturnsWellFormedReleaseEvent() {
+    JsonNode event = TestUtils.getMockReleaseNode("mockRepo", "mockRelease");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Published mockRepo: mockRelease", gitEvent.toString());
+  }
 }
