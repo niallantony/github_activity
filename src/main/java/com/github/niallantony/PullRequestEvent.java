@@ -6,7 +6,6 @@ import lombok.Getter;
 
 public class PullRequestEvent extends GitEvent {
 
-  private String toRepo;
   private @Getter String title;
   private @Getter String action;
 
@@ -14,12 +13,11 @@ public class PullRequestEvent extends GitEvent {
     super(event);
     this.action = this.payload.get("action").asText();
     this.title = this.payload.get("pull_request").get("title").asText();
-    this.toRepo = this.payload.get("pull_request").get("head").get("repo").get("full_name").asText();
   }
 
   @Override
   public String toString() {
-    return String.format("Pull request action: %s branch '%s' in repo %s", this.action, this.title, this.toRepo);
+    return String.format("Pull request action: %s branch '%s' in repo %s", this.action, this.title, this.repo_name);
   }
 
   @Override

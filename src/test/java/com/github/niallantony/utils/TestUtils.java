@@ -91,11 +91,6 @@ public class TestUtils {
     public MockNode withPullRequest(String title, String repo) {
       ObjectNode pullRequestNode = mapper.createObjectNode();
       pullRequestNode.put("title", title);
-      ObjectNode headNode = mapper.createObjectNode();
-      ObjectNode headRepoNode = mapper.createObjectNode();
-      headRepoNode.put("full_name", repo);
-      headNode.set("repo", headRepoNode);
-      pullRequestNode.set("head", headNode);
       this.payloadNode.set("pull_request", pullRequestNode);
       return this;
     }

@@ -138,7 +138,7 @@ public class EventAggregatorTest {
     events.add(issue2);
 
     ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
-    assertEquals("Pull request action: opened and closed branch 'mockTitle' in repo mockPullRepoName",
+    assertEquals("Pull request action: opened and closed branch 'mockTitle' in repo mockRepo",
         aggregated.get(0).toString());
     assertEquals(1, aggregated.size());
   }
