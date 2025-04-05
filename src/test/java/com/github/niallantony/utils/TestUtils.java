@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.niallantony.GitEvent;
 import com.github.niallantony.GollumEvent;
+import com.github.niallantony.IssueCommentEvent;
 import com.github.niallantony.PushEvent;
 
 public class TestUtils {
@@ -216,11 +217,30 @@ public class TestUtils {
     return base.asJsonNode();
   }
 
+  public static JsonNode getMockIssueCommentNode(String repo, String action, String issue) {
+    MockNode base = new MockNode("IssueCommentEvent")
+        .withRepo(repo)
+        .withAction(action)
+        .withIssue(issue);
+    return base.asJsonNode();
+  }
+
   public static ArrayList<GitEvent> getPushEventsWithSameRepoOfSizes(int[] sizes) {
     ArrayList<GitEvent> events = new ArrayList<>();
     for (int i = 0; i < sizes.length; i++) {
       JsonNode node = getMockPushNodeOfSize(sizes[i]);
       PushEvent event = new PushEvent(node);
+      events.add(event);
+    }
+    return events;
+  }
+
+  public static ArrayList<GitEvent> getIssueCommentEventsWithDifferentParams(String[] paramsList) {
+    ArrayList<GitEvent> events = new ArrayList<>();
+    for (int i = 0; i < paramsList.length; i++) {
+      String[] params = paramsList[i].split(",");
+      JsonNode node = getMockIssueCommentNode(params[0], params[1], params[2]);
+      IssueCommentEvent event = new IssueCommentEvent(node);
       events.add(event);
     }
     return events;

@@ -174,6 +174,15 @@ public class EventFactoryTest {
   }
 
   @Test
+  public void EventFactory_WhenGivenWatchEvent_ReturnsWatchEvent() {
+    JsonNode event = TestUtils.getMockNode("WatchEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(WatchEvent.class, gitEvent.getClass());
+  }
+
+  @Test
   public void EventFactory_WhenGivenWatchEvent_ReturnsWellFormedWatchEvent() {
     JsonNode event = TestUtils.getMockNode("WatchEvent");
     EventFactory factory = new EventFactory();
@@ -183,11 +192,21 @@ public class EventFactoryTest {
   }
 
   @Test
-  public void EventFactory_WhenGivenWatchEvent_ReturnsWatchEvent() {
-    JsonNode event = TestUtils.getMockNode("WatchEvent");
+  public void EventFactory_WhenGivenIssueCommentEvent_ReturnsIssueCommentEvent() {
+    JsonNode event = TestUtils.getMockNode("IssueCommentEvent");
     EventFactory factory = new EventFactory();
     GitEvent gitEvent = factory.create(event);
 
-    assertEquals(WatchEvent.class, gitEvent.getClass());
+    assertEquals(IssueCommentEvent.class, gitEvent.getClass());
   }
+
+  @Test
+  public void EventFactory_WhenGivenIssueCommentEvent_ReturnsWellFormedIssueCommentEvent() {
+    JsonNode event = TestUtils.getMockNode("IssueCommentEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("MockAction a comment on issue: mockIssueTitle (mockRepo)", gitEvent.toString());
+  }
+
 }

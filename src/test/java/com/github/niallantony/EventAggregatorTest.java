@@ -240,6 +240,17 @@ public class EventAggregatorTest {
     assertEquals(2, aggregated.size());
   }
 
+  @ParameterizedTest
+  @MethodSource("issueCommentsOfParams")
+  public void aggregator_WhenGivenIssueCommentsOfParams_AggregatesAppropriately(String[] params, int finalSize,
+      String firstString) {
+    ArrayList<GitEvent> events = TestUtils.getIssueCommentEventsWithDifferentParams(params);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(finalSize, aggregated.size());
+    assertEquals(firstString, aggregated.get(0).toString());
+  }
+
   private static Stream<Arguments> pushEventsOfSize() {
     int[] sizes1 = { 1, 3, 4 };
     int[] sizes2 = { 4, 3, 4 };
@@ -264,6 +275,22 @@ public class EventAggregatorTest {
         Arguments.arguments(repos2, 3),
         Arguments.arguments(repos3, 2),
         Arguments.arguments(repos4, 3));
+  }
+
+  private static Stream<Arguments> issueCommentsOfParams() {
+    String[] params1 = { "repo1,created,issue1", "repo1,created,issue1", "repo1,created,issue1" };
+    String[] params2 = { "repo1,created,issue1", "repo2,created,issue1", "repo1,created,issue1" };
+    String[] params3 = { "repo1,created,issue1", "repo1,created,issue1", "repo2,created,issue1" };
+    String[] params4 = { "repo1,created,issue1", "repo1,deleted,issue1", "repo1,created,issue1" };
+    String[] params5 = { "repo1,edited,issue1", "repo1,deleted,issue1", "repo1,created,issue1" };
+    String[] params6 = { "repo1,created,issue1", "repo1,created,issue2", "repo1,created,issue3" };
+    return Stream.of(
+        Arguments.arguments(params1, 1, "Created 3 comments on issue: issue1 (repo1)"),
+        Arguments.arguments(params2, 3, "Created a comment on issue: issue1 (repo1)"),
+        Arguments.arguments(params3, 2, "Created 2 comments on issue: issue1 (repo1)"),
+        Arguments.arguments(params4, 1, "Created 2 comments on issue: issue1 (repo1)"),
+        Arguments.arguments(params5, 1, "Created a comment on issue: issue1 (repo1)"),
+        Arguments.arguments(params6, 3, "Created a comment on issue: issue1 (repo1)"));
   }
 
   private static Stream<Arguments> gollumEventsOfRepo() {

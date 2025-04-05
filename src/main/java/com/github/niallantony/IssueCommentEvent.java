@@ -11,7 +11,7 @@ public class IssueCommentEvent extends GitEvent {
   public IssueCommentEvent(JsonNode event) {
     super(event);
     this.action = this.payload.get("action").asText();
-    this.issue = this.payload.get("issue").asText();
+    this.issue = this.payload.get("issue").get("title").asText();
   }
 
   @Override
