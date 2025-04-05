@@ -35,22 +35,6 @@ learning the Spring framework.
 - **JUnit and Mockito**: Create a solid suite of Unit Tests to make sure the application runs as needed.
 - **Bonus: Lombok**: Use Lombok to simplify code.
 
-## ToDo:
-
-- Create dedicated event actions for missing github events, include:
-    - `CommitCommentEvent`
-    - `ForkEvent`
-    - `GollumEvent`
-    - `IssueCommentEvent`
-    - `MemberEvent`
-    - `PublicEvent`
-    - `PullRequestReviewEvent`
-    - `PullRequestReviewCommentEvent`
-    - `PullRequestReviewThreadEvent`
-    - `ReleaseEvent`
-    - `SponsorshipEvent`
-    - `WatchEvent`
-
 ## Next Steps
 
 Next steps on this learning project depend on whether I choose to implement threads in this program or include
