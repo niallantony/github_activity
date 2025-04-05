@@ -44,6 +44,7 @@ public class EventFactory {
       case "PullRequestReviewEvent":
         return new PullRequestReviewEvent(event);
       case "PullRequestReviewCommentEvent":
+        return new PullRequestReviewCommentEvent(event);
       case "PullRequestReviewThreadEvent":
       default:
         return new GitEvent(event);

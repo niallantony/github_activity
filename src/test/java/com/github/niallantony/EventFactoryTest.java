@@ -280,4 +280,22 @@ public class EventFactoryTest {
 
     assertEquals("Reviewed a pull request in mockRepo: mockTitle", gitEvent.toString());
   }
+
+  @Test
+  public void EventFactory_WhenGivenPullRequestReviewCommentEvent_ReturnsPullRequestReviewCommentEvent() {
+    JsonNode event = TestUtils.getMockNode("PullRequestReviewCommentEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(PullRequestReviewCommentEvent.class, gitEvent.getClass());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenPullRequestReviewCommentEvent_ReturnsWellFormedPullRequestReviewCommentEvent() {
+    JsonNode event = TestUtils.getMockNode("PullRequestReviewCommentEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Commented on a pull request review: mockTitle (mockRepo)", gitEvent.toString());
+  }
 }

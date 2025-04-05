@@ -394,6 +394,50 @@ public class EventAggregatorTest {
     assertEquals("Reviewed a pull request in repo2: mockTitle", aggregated.get(1).toString());
   }
 
+  @Test
+  public void aggregator_whenGivenPullRequestReviewCommentEventsOfSameTitles_returnsOne() {
+    JsonNode node = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewCommentEvent", "mockTitle");
+    PullRequestReviewCommentEvent event1 = new PullRequestReviewCommentEvent(node);
+    PullRequestReviewCommentEvent event2 = new PullRequestReviewCommentEvent(node);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+    assertEquals("Made 2 comments on a pull request review: mockTitle (mockRepo)", aggregated.get(0).toString());
+  }
+
+  @Test
+  public void aggregator_whenGivenPullRequestReviewCommentEventsWithDifferentPullRequests_returnsBoth() {
+    JsonNode node = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewCommentEvent", "title1");
+    JsonNode node2 = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewCommentEvent", "title2");
+    PullRequestReviewCommentEvent event1 = new PullRequestReviewCommentEvent(node);
+    PullRequestReviewCommentEvent event2 = new PullRequestReviewCommentEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Commented on a pull request review: title2 (mockRepo)", aggregated.get(1).toString());
+  }
+
+  @Test
+  public void aggregator_whenGivenPullRequestReviewCommentEventsWithDifferentRepos_returnsBoth() {
+    JsonNode node = TestUtils.getMockNodeOfRepo("PullRequestReviewCommentEvent", "repo1");
+    JsonNode node2 = TestUtils.getMockNodeOfRepo("PullRequestReviewCommentEvent", "repo2");
+    PullRequestReviewCommentEvent event1 = new PullRequestReviewCommentEvent(node);
+    PullRequestReviewCommentEvent event2 = new PullRequestReviewCommentEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Commented on a pull request review: mockTitle (repo2)", aggregated.get(1).toString());
+  }
+
   private static Stream<Arguments> pushEventsOfSize() {
     int[] sizes1 = { 1, 3, 4 };
     int[] sizes2 = { 4, 3, 4 };
