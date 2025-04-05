@@ -27,6 +27,7 @@ public class EventFactory {
       case "IssueCommentEvent":
         return new IssueCommentEvent(event);
       case "MemberEvent":
+        return new MemberEvent(event);
       case "PublicEvent":
       case "PullRequestReviewEvent":
       case "PullRequestReviewCommentEvent":

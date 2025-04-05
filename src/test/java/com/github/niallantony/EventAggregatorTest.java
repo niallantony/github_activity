@@ -251,6 +251,36 @@ public class EventAggregatorTest {
     assertEquals(firstString, aggregated.get(0).toString());
   }
 
+  @Test
+  public void aggregator_WhenGivenMemberEventsOfSameRepo_AggregatesIntoOne() {
+    JsonNode node = TestUtils.getMockMemberEvent("user1");
+    MemberEvent event1 = new MemberEvent(node);
+    MemberEvent event2 = new MemberEvent(node);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+    assertEquals("Added 2 users to the repo mockRepo", aggregated.get(0).toString());
+  }
+
+  @Test
+  public void aggregator_WhenGivenMemberEventsOfDifferentRepo_AggregatesIntoOne() {
+    JsonNode node = TestUtils.getMockMemberEvent("user1");
+    JsonNode node2 = TestUtils.getMockMemberEventOfDifferentRepo("user2", "mockRepo2");
+    MemberEvent event1 = new MemberEvent(node);
+    MemberEvent event2 = new MemberEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Added user user1 to the repo mockRepo", aggregated.get(0).toString());
+    assertEquals("Added user user2 to the repo mockRepo2", aggregated.get(1).toString());
+  }
+
   private static Stream<Arguments> pushEventsOfSize() {
     int[] sizes1 = { 1, 3, 4 };
     int[] sizes2 = { 4, 3, 4 };

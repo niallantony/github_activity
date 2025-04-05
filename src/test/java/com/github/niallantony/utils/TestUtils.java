@@ -74,6 +74,13 @@ public class TestUtils {
       return this;
     }
 
+    public MockNode withUser(String name) {
+      ObjectNode member = mapper.createObjectNode();
+      member.put("name", name);
+      this.payloadNode.set("member", member);
+      return this;
+    }
+
     public MockNode withPullRequest(String title, String repo) {
       ObjectNode pullRequestNode = mapper.createObjectNode();
       pullRequestNode.put("title", title);
@@ -222,6 +229,20 @@ public class TestUtils {
         .withRepo(repo)
         .withAction(action)
         .withIssue(issue);
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockMemberEvent(String name) {
+    MockNode base = new MockNode("MemberEvent")
+        .withUser(name)
+        .withRepo("mockRepo");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockMemberEventOfDifferentRepo(String name, String repo) {
+    MockNode base = new MockNode("MemberEvent")
+        .withUser(name)
+        .withRepo(repo);
     return base.asJsonNode();
   }
 

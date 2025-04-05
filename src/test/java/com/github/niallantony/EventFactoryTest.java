@@ -209,4 +209,21 @@ public class EventFactoryTest {
     assertEquals("MockAction a comment on issue: mockIssueTitle (mockRepo)", gitEvent.toString());
   }
 
+  @Test
+  public void EventFactory_WhenGivenMemberEvent_ReturnsMemberEvent() {
+    JsonNode event = TestUtils.getMockMemberEvent("mockUser");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(MemberEvent.class, gitEvent.getClass());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenMemberEvent_ReturnsWellFormedMemberEvent() {
+    JsonNode event = TestUtils.getMockMemberEvent("mockUser");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Added user mockUser to the repo mockRepo", gitEvent.toString());
+  }
 }
