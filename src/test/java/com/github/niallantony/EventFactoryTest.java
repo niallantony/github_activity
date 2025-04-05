@@ -226,4 +226,22 @@ public class EventFactoryTest {
 
     assertEquals("Added user mockUser to the repo mockRepo", gitEvent.toString());
   }
+
+  @Test
+  public void EventFactory_WhenGivenPublicEvent_ReturnsPublicEvent() {
+    JsonNode event = TestUtils.getMockNode("PublicEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals(PublicEvent.class, gitEvent.getClass());
+  }
+
+  @Test
+  public void EventFactory_WhenGivenPublicEvent_ReturnsWellFormedPublicEvent() {
+    JsonNode event = TestUtils.getMockNode("PublicEvent");
+    EventFactory factory = new EventFactory();
+    GitEvent gitEvent = factory.create(event);
+
+    assertEquals("Made repo 'mockRepo' public", gitEvent.toString());
+  }
 }
