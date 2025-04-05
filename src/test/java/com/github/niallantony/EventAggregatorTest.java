@@ -438,6 +438,71 @@ public class EventAggregatorTest {
     assertEquals("Commented on a pull request review: mockTitle (repo2)", aggregated.get(1).toString());
   }
 
+  @Test
+  public void aggregator_whenGivenPullRequestReviewThreadEventsOfSameTitles_returnsOne() {
+    JsonNode node = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewThreadEvent", "mockTitle");
+    PullRequestReviewThreadEvent event1 = new PullRequestReviewThreadEvent(node);
+    PullRequestReviewThreadEvent event2 = new PullRequestReviewThreadEvent(node);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+    assertEquals("Marked a thread as mockAction in 'mockTitle' (mockRepo)", aggregated.get(0).toString());
+  }
+
+  @ParameterizedTest
+  @MethodSource("pullRequestReviewThreadsOfAction")
+  public void aggregator_whenGivenPullRequestReviewThreadEventsOfSameTitles_returnsLastAction(String[] actions,
+      String finalAction) {
+    JsonNode node1 = TestUtils.getMockPullRequestReviewThreadNodeOfAction(actions[0]);
+    JsonNode node2 = TestUtils.getMockPullRequestReviewThreadNodeOfAction(actions[1]);
+    JsonNode node3 = TestUtils.getMockPullRequestReviewThreadNodeOfAction(actions[2]);
+    PullRequestReviewThreadEvent event1 = new PullRequestReviewThreadEvent(node1);
+    PullRequestReviewThreadEvent event2 = new PullRequestReviewThreadEvent(node2);
+    PullRequestReviewThreadEvent event3 = new PullRequestReviewThreadEvent(node3);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    events.add(event3);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(1, aggregated.size());
+    assertEquals(String.format("Marked a thread as %s in 'mockTitle' (mockRepo)", finalAction),
+        aggregated.get(0).toString());
+  }
+
+  @Test
+  public void aggregator_whenGivenPullRequestReviewThreadEventsWithDifferentPullRequests_returnsBoth() {
+    JsonNode node = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewThreadEvent", "title1");
+    JsonNode node2 = TestUtils.getMockPullRequesNodeOfTitle("PullRequestReviewThreadEvent", "title2");
+    PullRequestReviewThreadEvent event1 = new PullRequestReviewThreadEvent(node);
+    PullRequestReviewThreadEvent event2 = new PullRequestReviewThreadEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Marked a thread as mockAction in 'title2' (mockRepo)", aggregated.get(1).toString());
+  }
+
+  @Test
+  public void aggregator_whenGivenPullRequestReviewThreadEventsWithDifferentRepos_returnsBoth() {
+    JsonNode node = TestUtils.getMockNodeOfRepo("PullRequestReviewThreadEvent", "repo1");
+    JsonNode node2 = TestUtils.getMockNodeOfRepo("PullRequestReviewThreadEvent", "repo2");
+    PullRequestReviewThreadEvent event1 = new PullRequestReviewThreadEvent(node);
+    PullRequestReviewThreadEvent event2 = new PullRequestReviewThreadEvent(node2);
+    ArrayList<GitEvent> events = new ArrayList<>();
+    events.add(event1);
+    events.add(event2);
+    ArrayList<GitEvent> aggregated = EventAggregator.aggregate(events);
+
+    assertEquals(2, aggregated.size());
+    assertEquals("Marked a thread as mockAction in 'mockTitle' (repo2)", aggregated.get(1).toString());
+  }
+
   private static Stream<Arguments> pushEventsOfSize() {
     int[] sizes1 = { 1, 3, 4 };
     int[] sizes2 = { 4, 3, 4 };
@@ -490,6 +555,18 @@ public class EventAggregatorTest {
         Arguments.arguments(repos2, 3, 3),
         Arguments.arguments(repos3, 2, 6),
         Arguments.arguments(repos4, 3, 3));
+  }
+
+  private static Stream<Arguments> pullRequestReviewThreadsOfAction() {
+    String[] repos1 = { "resolved", "resolved", "unresolved" };
+    String[] repos2 = { "resolved", "unresolved", "resolved" };
+    String[] repos3 = { "resolved", "unresolved", "unresolved" };
+    String[] repos4 = { "resolved", "unresolved", "foobar" };
+    return Stream.of(
+        Arguments.arguments(repos1, "unresolved"),
+        Arguments.arguments(repos2, "resolved"),
+        Arguments.arguments(repos3, "unresolved"),
+        Arguments.arguments(repos4, "foobar"));
   }
 
   private static Stream<Arguments> genericEventsOfType() {

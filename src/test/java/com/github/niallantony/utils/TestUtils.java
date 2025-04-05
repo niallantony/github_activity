@@ -222,7 +222,16 @@ public class TestUtils {
   public static JsonNode getMockPullRequesNodeOfTitle(String type, String title) {
     MockNode base = new MockNode(type)
         .withRepo("mockRepo")
-        .withPullRequest(title, "mockRepo");
+        .withPullRequest(title, "mockRepo")
+        .withAction("mockAction");
+    return base.asJsonNode();
+  }
+
+  public static JsonNode getMockPullRequestReviewThreadNodeOfAction(String action) {
+    MockNode base = new MockNode("PullRequestReviewThreadEvent")
+        .withRepo("mockRepo")
+        .withPullRequest("mockTitle", "mockRepo")
+        .withAction(action);
     return base.asJsonNode();
   }
 
