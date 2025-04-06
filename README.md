@@ -1,10 +1,9 @@
 # Github Activity
-
-A command-line program for fetching Github Activity and displaying it on the command line
-
 <a href="https://skillicons.dev">
   <img src="https://skillicons.dev/icons?i=java,maven" />
 </a>
+
+A command-line program for fetching Github Activity and displaying it on the command line
 
 ## How to Use
 
@@ -37,13 +36,17 @@ learning the Spring framework.
 
 ## Next Steps
 
-Next steps on this learning project depend on whether I choose to implement threads in this program or include
-persistance with a database. After reading up on these topics I might find it suits a different project type
-more than a future version of this (it does feel like this has gone as far as I want it to...)
+This project was initially started as a learning project to start me off with Maven, and get a first functional Java app out there. That goal is complete - and I have ended up with a robust, albeit small, application which is packaged and runs as intended.
+
+There are plenty of roads now for improvement: 
+- This could be converted into a micro-service API for getting human-readable summaries of Github user's activities
+- There is the opportunity to practice some data visualisation and expand this into a set of dashboard tools for displaying user activity
+- This could be the base of a tool which tracks weekly activity for developers, condensed into weekly or monthly digests.
+
+The possibilities are there - and while for now I will be focussing on other Java skills - I will be back to expand this project.
 
 Next steps on my *overall* Java journey, however, include:
- 
-- **Threads**: making an app that executes its processes on multiple threads
+
 - **Databases**: learning the fundamentals of connecting Java to a database
 - **Spring**: after the above objectives; I will feel ready to dive into the Spring framework
 
